@@ -42,13 +42,18 @@
   color: #f5c518;
 }
 
+.overview span{
+  color: #f5c518;
+  font-size: 20px;
+  font-weight: bold;
+}
 .overview {
+  font-size: 17px;
   color: #ccc;
-  line-height: 1.7;
+  line-height: 1.8;
   margin-bottom: 25px;
   max-width: 600px;
 }
-
 .release {
   color: #f5c518;
   margin-bottom: 10px;
