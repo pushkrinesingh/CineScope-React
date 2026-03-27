@@ -1,8 +1,8 @@
 .home-section {
   padding: 40px 60px;
-  background: #0b0c10;
-  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1115, #161922);
   color: #fff;
+  min-height: 100vh;
 }
 
 .home-header {
@@ -20,74 +20,82 @@
 
 .toggle-buttons {
   display: flex;
-  gap: 10px;
+  background: #1c1f2b;
+  padding: 5px;
+  border-radius: 30px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
 }
 
 .toggle-buttons button {
-  padding: 8px 16px;
   border: none;
-  background: #1f1f1f;
-  color: #aaa;
+  padding: 8px 18px;
   border-radius: 20px;
+  background: transparent;
+  color: #aaa;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-.toggle-buttons button:hover {
-  background: #e50914;
+.toggle-buttons .active-btn {
+  background: linear-gradient(135deg, #ec5b13, #ff416c);
   color: #fff;
 }
 
-.active-btn {
-  background: #e50914 !important;
-  color: #fff !important;
+.toggle-buttons button:hover {
+  color: #fff;
 }
 
 .movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 15px 5px;
+  scrollbar-width: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-card {
-  background: #141414;
-  border-radius: 12px;
+  min-width: 190px;
+  flex-shrink: 0;
+  background: #1c1f2b;
+  border-radius: 14px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .movie-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 10px 25px rgba(229, 9, 20, 0.4);
+  transform: translateY(-10px) scale(1.07);
 }
 
 .movie-card img {
   width: 100%;
-  height: 260px;
+  height: 270px;
   object-fit: cover;
-  display: block;
 }
 
 .content {
-  padding: 10px 12px;
+  padding: 10px;
 }
 
 .content h3 {
-  font-size: 15px;
-  margin-bottom: 5px;
-  font-weight: 500;
-  color: #fff;
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: #f5c518;
 }
 
 .content p {
-  font-size: 12px;
-  color: #bbb;
+  font-size: 15px;
+  color: #aaa;
 }
 
 .movie-grid p {
-  grid-column: 1 / -1;
-  text-align: center;
-  font-size: 18px;
-  color: #888;
+  color: white;
+  font-size: 17px;
 }
