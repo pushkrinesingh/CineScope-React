@@ -2,10 +2,9 @@ import React, { useContext } from "react";
 import { MovieContext } from "../Components/Router";
 import { baseImageUrl } from "../data";
 import { Link } from "react-router-dom";
-import "./Home.css"; 
+import "./Home.css";
 
 const WatchList = () => {
-
   const { WatchList } = useContext(MovieContext);
 
   function trimContent(content) {
@@ -15,51 +14,48 @@ const WatchList = () => {
 
   return (
     <div className="home-section">
-
       <h2>Your WatchList</h2>
 
-      <div className="movie-grid">
-
+     <div className="movie-grid watchlist-grid">
         {WatchList.length > 0 ? (
+          WatchList.map((item) => {
+            const isTV = item.name !== undefined;
 
-          WatchList.map((item) => (
+            return (
+              <div key={item.id} className="movie-card">
+                {item.poster_path && (
+                  <Link to={`/${isTV ? "tv" : "movie"}/${item.id}`}>
+                    <img
+                      src={`${baseImageUrl}${item.poster_path}`}
+                      alt={item.title || item.name}
+                    />
+                  </Link>
+                )}
 
-            <div key={item.id} className="movie-card">
+                <div className="content">
+                  <h3>{trimContent(item.title || item.name)}</h3>
 
-              {item.poster_path && (
-                <Link to={`/movie/${item.id}`}>
-                  <img
-                    src={`${baseImageUrl}${item.poster_path}`}
-                    alt={item.title}
-                  />
-                </Link>
-              )}
-
-              <div className="content">
-
-                <h3>{trimContent(item.title || item.name)}</h3>
-
-                <p>
-                  {item.release_date
-                    ? new Date(item.release_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                      })
-                    : ""}
-                </p>
-
+                  <p>
+                    {item.release_date || item.first_air_date
+                      ? new Date(
+                          item.release_date || item.first_air_date,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "2-digit",
+                        })
+                      : ""}
+                  </p>
+                </div>
               </div>
-
-            </div>
-          ))
-
+            );
+          })
         ) : (
-          <p>No movies in WatchList</p>
+          <p className="empty-state">
+            Your Watchlist is empty. Start adding movies!
+          </p>
         )}
-
       </div>
-
     </div>
   );
 };

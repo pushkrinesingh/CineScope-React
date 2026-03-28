@@ -19,12 +19,14 @@ function Router() {
       setWatchList([...WatchList, MovieToAdd]);
     }
   }
+
   return (
     <BrowserRouter>
       <MovieContext.Provider
         value={{ WatchList, setWatchList, AddToWatchlist }}
       >
         <Header />
+
         <Routes>
           <Route
             path="/"
@@ -36,14 +38,16 @@ function Router() {
                   btn2="Week"
                   urls={[urls.trendingByDay, urls.trendingByWeek]}
                 />
+
                 <Home
-                  heading="Popular Movies"
+                  heading="Popular"
                   btn1="Movies"
                   btn2="TV Shows"
                   urls={[urls.popularMovies, urls.popularTVShows]}
                 />
+
                 <Home
-                  heading="Top Rated Movies"
+                  heading="Top Rated"
                   btn1="Movies"
                   btn2="TV Shows"
                   urls={[urls.topRatedMovies, urls.topRatedTVShows]}
@@ -51,10 +55,14 @@ function Router() {
               </>
             }
           />
+
           <Route path="/movie/:id" element={<SingleMovie />} />
+          <Route path="/tv/:id" element={<SingleMovie />} />
+
           <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+
         <Footer />
       </MovieContext.Provider>
     </BrowserRouter>

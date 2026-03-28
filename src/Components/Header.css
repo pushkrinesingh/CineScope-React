@@ -1,77 +1,108 @@
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 0 40px;
   height: 70px;
-  background: rgba(15, 15, 26, 0.95);
-  backdrop-filter: blur(10px);
+  background: #0f1115;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo a {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 600;
   color: #fff;
   text-decoration: none;
 }
 
 .logo svg {
-  font-size: 26px;
-  color: #e50914;
+  font-size: 30px;
+  color: #f5c518;
+  transition: all 0.3s ease;
 }
 
+.logo a:hover svg {
+  transform: rotate(-25deg) scale(1.15);
+}
 .searchbar {
-  flex: 1;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  background: #1c1f2b;
+  border-radius: 25px;
+  padding: 5px 12px;
+  width: 35%;
+  transition: all 0.3s ease;
+}
+
+.searchbar:focus-within {
+  background: #2a2e3f;
+  transform: scale(1.03);
 }
 
 .searchbar input {
-  width: 60%;
-  padding: 10px 16px;
-
-  border-radius: 25px;
+  flex: 1;
   border: none;
-
-  background: #1f1f1f;
-  color: #fff;
   outline: none;
+  background: transparent;
+  color: #fff;
+  padding: 8px;
   font-size: 14px;
-  transition: 0.3s ease;
 }
 
-.searchbar input:focus {
-  background: #2a2a2a;
-  box-shadow: 0 0 0 2px #e50914;
+.searchbar button {
+  border: none;
+  background: transparent;
+  color: #f5c518;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
+.searchbar button:hover {
+  transform: scale(1.2) rotate(8deg);
+}
 .navlinks {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 .navlinks a {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
   text-decoration: none;
   color: #ccc;
-  font-size: 15px;
-  transition: 0.3s ease;
+  font-size: 18px;
+  transition: color 0.3s ease;
 }
 
 .navlinks a:hover {
-  color: #fff;
+  color: #f5c518;
+}
+
+.navlinks a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: #f5c518;
+  transition: width 0.3s ease;
+}
+
+.navlinks a:hover::after {
+  width: 100%;
 }
 
 .navlinks svg {
-  color: #e50914;
+  color: #f5c518;
 }

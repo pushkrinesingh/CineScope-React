@@ -1,18 +1,20 @@
-import { useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { baseImageUrl } from "../data";
 import { FaBookmark, FaStar } from "react-icons/fa";
 import { ImCancelCircle } from "react-icons/im";
 
 import "./SingleMovie.css";
-import { MovieContext } from "../Components/Router";
 
 function SingleMovie() {
   const { id } = useParams();
+  const location = useLocation();
+
   const [movie, setMovie] = useState(null);
   const [trailerKey, setTrailer] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
-  let { AddToWatchlist } = useContext(MovieContext);
+
+  const isTV = location.pathname.includes("/tv");
 
   useEffect(() => {
     fetchMovie();
@@ -23,8 +25,10 @@ function SingleMovie() {
   async function fetchMovie() {
     const API_KEY = import.meta.env.VITE_API_KEY;
 
+    const type = isTV ? "tv" : "movie";
+
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`,
     );
 
     const result = await response.json();
@@ -38,9 +42,10 @@ function SingleMovie() {
     }
 
     const API_KEY = import.meta.env.VITE_API_KEY;
+    const type = isTV ? "tv" : "movie";
 
     const res = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=${API_KEY}`,
     );
 
     const data = await res.json();
@@ -61,33 +66,34 @@ function SingleMovie() {
     <div className="page">
       <div className="single-movie">
         <div className="left">
-          <img src={`${baseImageUrl}${movie.poster_path}`} alt={movie.title} />
+          <img
+            src={`${baseImageUrl}${movie.poster_path}`}
+            alt={movie.title || movie.name}
+          />
         </div>
 
         <div className="right">
-          <h1>{movie.title}</h1>
+          <h1>{movie.title || movie.name}</h1>
 
           <p className="overview">
-            <span>Description : </span>
-            <br />
+            <span>Description:</span>
             {movie.overview}
           </p>
 
-          <p className="release">Release Date: {movie.release_date}</p>
+          <p className="release">
+            Release Date: {movie.release_date || movie.first_air_date}
+          </p>
 
           <p className="rating">
             Rating:
-            <FaStar /> {movie.vote_average.toFixed(1)}/10
+            <FaStar /> {movie.vote_average?.toFixed(1)}/10
           </p>
 
           <button className="trailer-btn" onClick={handleTrailer}>
             {showTrailer ? "Close Trailer" : "Watch Trailer"}
           </button>
 
-          <button
-            className="watchlist-btn"
-            onClick={() => AddToWatchlist(movie)}
-          >
+          <button className="watchlist-btn">
             <FaBookmark /> Add To Watchlist
           </button>
         </div>
@@ -97,7 +103,7 @@ function SingleMovie() {
         <div className="trailer-modal" onClick={() => setShowTrailer(false)}>
           <div className="trailer-content" onClick={(e) => e.stopPropagation()}>
             <span className="close-btn" onClick={() => setShowTrailer(false)}>
-              <ImCancelCircle />
+             <ImCancelCircle />
             </span>
 
             <iframe

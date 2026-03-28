@@ -8,7 +8,9 @@ import { MovieContext } from "../Components/Router";
 function Home({ urls, heading, btn1, btn2 }) {
   const [movieData, setMovieData] = useState([]);
   const [showData, setShowData] = useState(urls[0]);
-  let { AddToWatchlist } = useContext(MovieContext);
+
+  const { AddToWatchlist } = useContext(MovieContext);
+
   useEffect(() => {
     async function fetchMovies() {
       try {
@@ -24,10 +26,8 @@ function Home({ urls, heading, btn1, btn2 }) {
   }, [showData]);
 
   function trimContent(content) {
-    if (content.length > 20) {
-      return content.slice(0, 20) + "...";
-    }
-    return content;
+    if (!content) return "";
+    return content.length > 20 ? content.slice(0, 20) + "..." : content;
   }
 
   return (
@@ -54,38 +54,44 @@ function Home({ urls, heading, btn1, btn2 }) {
 
       <div className="movie-grid">
         {movieData.length > 0 ? (
-          movieData.map((item) => (
-            <div key={item.id} className="movie-card">
-              {item.poster_path && (
-                <Link to={`/movie/${item.id}`}>
-                  <img
-                    src={`${baseImageUrl}${item.poster_path}`}
-                    alt={item.title}
-                  />
-                </Link>
-              )}
+          movieData.map((item) => {
+            const isTV = showData.includes("tv");
 
-              <div className="content">
-                <h3>{trimContent(item.title || item.name)}</h3>
+            return (
+              <div key={item.id} className="movie-card">
+                {item.poster_path && (
+                  <Link to={`/${isTV ? "tv" : "movie"}/${item.id}`}>
+                    <img
+                      src={`${baseImageUrl}${item.poster_path}`}
+                      alt={item.title || item.name}
+                    />
+                  </Link>
+                )}
 
-                <p>
-                  {item.release_date
-                    ? new Date(item.release_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                      })
-                    : ""}
-                </p>
-                <button onClick={() => AddToWatchlist(item)}>
-                  {" "}
-                  <FaBookmark /> WatchList
-                </button>
+                <div className="content">
+                  <h3>{trimContent(item.title || item.name)}</h3>
+
+                  <p>
+                    {item.release_date || item.first_air_date
+                      ? new Date(
+                          item.release_date || item.first_air_date,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "2-digit",
+                        })
+                      : ""}
+                  </p>
+
+                  <button onClick={() => AddToWatchlist(item)}>
+                    <FaBookmark /> WatchList
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
-          <p>No Data To Show Yet!</p>
+          <p className="no-data">No Data To Show Yet!</p>
         )}
       </div>
     </section>
