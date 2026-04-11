@@ -1,0 +1,305 @@
+import { useParams, useLocation, Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { baseImageUrl } from "../data";
+import { FaStar, FaPlayCircle, FaUser } from "react-icons/fa";
+import { BsBookmarkCheckFill, BsBookmarkPlusFill } from "react-icons/bs";
+import { ImCancelCircle } from "react-icons/im";
+import "./SingleMovie.css";
+import { MovieContext } from "../Components/Router";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { db } from "../firebase";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+} from "firebase/firestore";
+
+import { options } from "../data";
+
+function SingleMovie() {
+  const { id } = useParams();
+  const location = useLocation();
+  const isTV = location.pathname.includes("/tv");
+  const [cast, setCast] = useState([]);
+  const [movie, setMovie] = useState(null);
+  const [trailerKey, setTrailer] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [Reviews, setReviews] = useState([]);
+  const [userReviews, setUserReviews] = useState([]);
+  const [reviewText, setReviewText] = useState("");
+  const navigate = useNavigate();
+
+  let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
+    useContext(MovieContext);
+
+  useEffect(() => {
+    fetchMovie();
+    setShowTrailer(false);
+    setTrailer(null);
+  }, [id, isTV]);
+
+  async function fetchUserReviews() {
+    const q = query(
+      collection(db, "reviews"),
+      where("movieId", "==", String(id)),
+      orderBy("createdAt", "desc"),
+    );
+
+    const snapshot = await getDocs(q);
+
+    const moviereviews = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setUserReviews(moviereviews);
+  }
+
+  async function fetchMovie() {
+    const type = isTV ? "tv" : "movie";
+
+    const movieUrl = `https://api.themoviedb.org/3/${type}/${id}`;
+    const castUrl = `https://api.themoviedb.org/3/${type}/${id}/credits`;
+    const reviewUrl = `https://api.themoviedb.org/3/${type}/${id}/reviews`;
+
+    const moviePromise = fetch(movieUrl, options);
+    const castPromise = fetch(castUrl, options);
+    const reviewPromise = fetch(reviewUrl, options);
+    const userReviewPromise = fetchUserReviews();
+
+    const [movieRes, castRes, reviewRes] = await Promise.all([
+      moviePromise,
+      castPromise,
+      reviewPromise,
+    ]);
+
+    const movieData = await movieRes.json();
+    const castData = await castRes.json();
+    const reviewData = await reviewRes.json();
+
+    setMovie(movieData);
+
+    const mainCast = (castData.cast || [])
+      .filter((actor) => actor.profile_path)
+      .sort((a, b) => a.order - b.order)
+      .slice(0, 30);
+
+    setCast(mainCast);
+    setReviews(reviewData.results.slice(0, 5));
+
+    await userReviewPromise;
+  }
+
+  async function submitReview() {
+    if (!user) {
+      toast.warning("Login to post review");
+      navigate(`/login?next=${location.pathname}`);
+      return;
+    }
+
+    if (!reviewText.trim()) return;
+
+    await addDoc(collection(db, "reviews"), {
+      movieId: String(id),
+      text: reviewText,
+      username: user.email.split("@")[0].replace(/[0-9.]/g, ""),
+      createdAt: Date.now(),
+    });
+
+    setReviewText("");
+    fetchUserReviews();
+  }
+
+  async function handleTrailer() {
+    if (showTrailer) {
+      setShowTrailer(false);
+      return;
+    }
+
+    const type = isTV ? "tv" : "movie";
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}/videos`,
+      options,
+    );
+
+    const data = await res.json();
+
+    const trailer = data.results.find(
+      (vid) => vid.type === "Trailer" && vid.site === "YouTube",
+    );
+
+    if (trailer) {
+      setTrailer(trailer.key);
+      setShowTrailer(true);
+    }
+  }
+
+  if (!movie)
+    return (
+      <div className="single-skeleton">
+        <div className="skeleton-left"></div>
+
+        <div className="skeleton-right">
+          <div className="skeleton-title"></div>
+          <div className="skeleton-text"></div>
+          <div className="skeleton-text"></div>
+          <div className="skeleton-text small"></div>
+          <div className="skeleton-btn"></div>
+          <div className="skeleton-btn"></div>
+        </div>
+      </div>
+    );
+
+  return (
+    <div className="page">
+      <div
+        className="backdrop"
+        style={{
+          backgroundImage: movie.backdrop_path
+            ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+            : `url(https://image.tmdb.org/t/p/w500${movie.poster_path})`,
+        }}
+      >
+        <div className="single-movie">
+          <div className="left">
+            <img
+              src={`${baseImageUrl}${movie.poster_path}`}
+              alt={movie.title || movie.name}
+            />
+          </div>
+
+          <div className="right">
+            <h1>{movie.title || movie.name}</h1>
+
+            <p className="overview">
+              <span>Description:</span>
+              {movie.overview}
+            </p>
+            <p className="genre">
+              <span>Genre: </span>
+              {movie.genres.map((e) => e.name).join(" , ") || "N/A"}
+            </p>
+
+            <p className="release">
+              Release Date: {movie.release_date || movie.first_air_date}
+            </p>
+
+            <p className="rating">
+              Rating:
+              <FaStar /> {movie.vote_average?.toFixed(1)}/10
+            </p>
+
+            <button className="trailer-btn" onClick={handleTrailer}>
+              <FaPlayCircle /> {showTrailer ? "Close Trailer" : "Watch Trailer"}
+            </button>
+
+            <button
+              className="watchlist-btn"
+              onClick={async () => {
+                if (!user) {
+                  toast.warning("Please login first ⚠️");
+                  navigate(`/login?next=${location.pathname}`, {
+                    state: { pendingMovie: movie },
+                  });
+                  return;
+                }
+
+                if (IsInWatchlist(movie.id)) {
+                  await RemoveFromWatchlist(movie.id);
+                } else {
+                  await AddToWatchlist(movie);
+                }
+              }}
+            >
+              {IsInWatchlist(movie.id) ? (
+                <BsBookmarkCheckFill />
+              ) : (
+                <BsBookmarkPlusFill />
+              )}
+              {IsInWatchlist(movie.id)
+                ? " Remove From Watchlist"
+                : " Add To Watchlist"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {showTrailer && trailerKey && (
+        <div className="trailer-modal" onClick={() => setShowTrailer(false)}>
+          <div className="trailer-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-btn" onClick={() => setShowTrailer(false)}>
+              <ImCancelCircle />
+            </span>
+
+            <iframe
+              src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+              title="Trailer"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
+
+      <div className="cast-section">
+        <h2 className="cast-heading">Cast</h2>
+
+        <div className="cast-grid">
+          {cast.map((actor, index) => (
+            <Link key={index} to={`/person/${actor.id}`} className="cast-card">
+              <div className="cast-img">
+                {actor.profile_path ? (
+                  <img
+                    src={`${baseImageUrl}${actor.profile_path}`}
+                    alt={actor.name}
+                  />
+                ) : (
+                  <div className="no-cast-img">
+                    <FaUser />
+                  </div>
+                )}
+              </div>
+
+              <p className="cast-name">{actor.name}</p>
+              <span className="cast-character">as {actor.character}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div className="review-section">
+        <h2>Critics Reviews</h2>
+
+        {Reviews.map((rev) => (
+          <div key={rev.id} className="review-card">
+            <b>{rev.author}</b>
+            <p>{rev.content.slice(0, 300)}...</p>
+          </div>
+        ))}
+        <h3>Post Your Reviews</h3>
+
+        <div className="review-input">
+          <textarea
+            placeholder="Write your review..."
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+          />
+
+          <button onClick={submitReview}>Post Review</button>
+        </div>
+
+        {userReviews.map((r) => (
+          <div key={r.id} className="review-card">
+            <b>{r.username}</b>
+            <p>{r.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default SingleMovie;

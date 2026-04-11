@@ -1,0 +1,85 @@
+.notfound-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #020617;
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.notfound-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(2, 6, 23, 0.95),
+    rgba(15, 23, 42, 0.7)
+  );
+  z-index: 0;
+}
+
+.notfound-box {
+  position: relative;
+  z-index: 1;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(15px);
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+}
+
+.notfound-box h1 {
+  font-size: 100px;
+  margin: 0;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: none;
+  -webkit-text-fill-color: transparent;
+}
+
+.notfound-box h2 {
+  margin: 10px 0;
+  font-size: 28px;
+  color: #e5e7eb;
+}
+
+.notfound-box p {
+  margin-top: 10px;
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.countdown {
+  color: #facc15;
+  font-weight: bold;
+  font-size: 20px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.notfound-box button {
+  margin-top: 20px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.notfound-box button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+}

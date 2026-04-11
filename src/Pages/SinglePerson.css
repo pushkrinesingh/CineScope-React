@@ -1,0 +1,183 @@
+.person-page {
+  padding: 50px 40px;
+  background: linear-gradient(135deg, #141414, #1c1c1c);
+  color: white;
+  min-height: 100vh;
+}
+
+/* PERSON INFO */
+
+.person-info {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 50px;
+  align-items: flex-start;
+}
+
+.person-info img {
+  width: 280px;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.person-info h1 {
+  font-size: 38px;
+  margin-bottom: 15px;
+}
+
+.person-info p {
+  color: #ccc;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.bio {
+  margin-top: 20px;
+  line-height: 1.7;
+  color: #aaa;
+  max-width: 700px;
+}
+
+/* HEADING */
+
+.person-page h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  position: relative;
+}
+
+.person-page h2::after {
+  content: "";
+  width: 50px;
+  height: 3px;
+  background: #f5c518;
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+}
+
+/* MOVIE GRID */
+
+.movie-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 25px;
+}
+
+/* MOVIE CARD */
+
+.movie-box {
+  background: #1b1b1b;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.movie-box:hover {
+  transform: translateY(-6px);
+}
+
+.movie-box img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+}
+
+.movie-box p {
+  padding: 10px;
+  font-size: 14px;
+  color: #ddd;
+  text-align: center;
+}
+
+/* LOAD MORE BUTTON */
+
+.load-more-btn {
+  display: block;
+  margin: 40px auto 0;
+  padding: 12px 28px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #e50914;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.load-more-btn:hover {
+  background: #b20710;
+}
+/* SKELETON BASE */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #2a2a2a 25%,
+    #3a3a3a 37%,
+    #2a2a2a 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* PERSON SKELETON */
+
+.skeleton-img {
+  width: 280px;
+  height: 420px;
+  border-radius: 12px;
+}
+
+.person-text {
+  width: 100%;
+}
+
+.skeleton-title {
+  width: 250px;
+  height: 32px;
+  margin-bottom: 20px;
+}
+
+.skeleton-text {
+  width: 200px;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.skeleton-bio {
+  width: 80%;
+  height: 120px;
+  margin-top: 15px;
+}
+
+/* MOVIE SKELETON */
+
+.skeleton-poster {
+  width: 100%;
+  height: 270px;
+}
+
+.skeleton-movie-title {
+  width: 80%;
+  height: 14px;
+  margin: 10px auto;
+}
