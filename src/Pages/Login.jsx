@@ -17,7 +17,6 @@ const Login = () => {
   const nextPath = searchParams.get("next") || "/";
   const location = useLocation();
   const pendingMovie = location.state?.pendingMovie || null;
-  const { AddToWatchlist } = useContext(MovieContext);
 
   async function handleSignup(email, password) {
     if (password !== confirmPassword) {
@@ -27,11 +26,11 @@ const Login = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      if (pendingMovie) {
-        AddToWatchlist(pendingMovie);
-      }
+    
       alert("Signup successful ✅");
-      navigate(nextPath);
+      navigate(nextPath, {
+      state: { pendingMovie }, 
+    });
     } catch (err) {
       alert(err.message);
     }
@@ -40,12 +39,12 @@ const Login = () => {
   async function handleLogin(email, password) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      if (pendingMovie) {
-        AddToWatchlist(pendingMovie);
-      }
+      
 
       alert("Login successful ✅");
-      navigate(nextPath);
+      navigate(nextPath, {
+      state: { pendingMovie }, 
+    });
     } catch (err) {
       alert(err.message);
     }
