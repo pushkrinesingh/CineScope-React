@@ -107,7 +107,7 @@
 .trailer-btn,
 .watchlist-btn {
   margin-top: 10px;
-    display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -139,10 +139,10 @@
   box-shadow: 0 0 12px rgba(245, 197, 24, 0.5);
 }
 
-.watchlist-btn svg ,
-.trailer-btn svg{
-  font-size: 20px;  
-  flex-shrink: 0;    
+.watchlist-btn svg,
+.trailer-btn svg {
+  font-size: 20px;
+  flex-shrink: 0;
 }
 
 .trailer-modal {
@@ -283,7 +283,6 @@
   padding: 40px;
 }
 
-
 .skeleton-left {
   width: 260px;
   height: 380px;
@@ -291,7 +290,6 @@
   background: #2a2a2a;
   animation: shimmer 1.5s infinite linear;
 }
-
 
 .skeleton-right {
   flex: 1;
@@ -327,7 +325,6 @@
   background: #2a2a2a;
   animation: shimmer 1.5s infinite linear;
 }
-
 
 @keyframes shimmer {
   0% {
@@ -378,7 +375,7 @@
   border-radius: 12px;
   padding: 18px 20px;
   margin-top: 18px;
-
+  position: relative;
   transition: all 0.25s ease;
 }
 
@@ -400,8 +397,10 @@
   font-size: 15px;
   margin-top: 8px;
   line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
-
 
 .review-input {
   margin-top: 30px;
@@ -451,6 +450,82 @@
 }
 
 .review-input button:hover {
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  margin-top: 10px;
+  width: 150px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(245, 197, 24, 0.4);
+  color: #f5c518;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cancel-btn:hover {
+  background: rgba(245, 197, 24, 0.1);
+  border-color: #f5c518;
+  transform: scale(1.05);
+}
+
+.review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.review-btns {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  display: flex;
+}
+
+.edit-btn {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(245, 197, 24, 0.15);
+  color: #f5c518;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.edit-btn:hover {
+  background: rgba(245, 197, 24, 0.25);
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(218, 59, 59, 0.15);
+  color: #ff4d4d;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 77, 77, 0.368);
   transform: scale(1.05);
 }
 
@@ -535,6 +610,21 @@
     max-width: 100%;
   }
 
+  .review-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .review-btn {
+    gap: 8px;
+  }
+
+  .review-card p {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
   .single-skeleton {
     flex-direction: column;
     align-items: center;
@@ -548,7 +638,6 @@
     height: 300px;
   }
 }
-
 @media (max-width: 480px) {
   .backdrop {
     padding: 24px 12px;
@@ -616,6 +705,24 @@
 
   .review-card p {
     font-size: 13px;
+    word-break: break-word;
+  }
+
+  .review-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .review-btns {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    font-size: 12px;
+    padding: 6px 10px;
   }
 
   .single-skeleton {

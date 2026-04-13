@@ -30,10 +30,12 @@ export const MovieContext = createContext(null);
 function Router() {
   const [WatchList, setWatchList] = useState([]);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
+      setLoading(false); // 🔥 important
     });
     return () => unsub();
   }, []);
@@ -91,6 +93,7 @@ function Router() {
           RemoveFromWatchlist,
           IsInWatchlist,
           user,
+          loading,
           handleLogout,
         }}
       >

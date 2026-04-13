@@ -23,13 +23,13 @@
   margin-top: 25px;
 }
 .footer-left h3 svg{
-  color: #f5c518;
+  color: red;
 }
 .footer-left h3::after{
     content: "";
   width: 245px;
   height: 5px;
-  background: #f5c518;
+  background: red;
   position: absolute;
   left: 0;
   bottom: -8px;

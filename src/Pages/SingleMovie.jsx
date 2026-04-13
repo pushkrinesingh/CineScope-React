@@ -4,6 +4,8 @@ import { baseImageUrl } from "../data";
 import { FaStar, FaPlayCircle, FaUser } from "react-icons/fa";
 import { BsBookmarkCheckFill, BsBookmarkPlusFill } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
+import { MdDelete, MdEdit } from "react-icons/md";
+
 import "./SingleMovie.css";
 import { MovieContext } from "../Components/Router";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +14,13 @@ import { db } from "../firebase";
 import {
   collection,
   addDoc,
-  getDocs,
   query,
   where,
   orderBy,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 import { options } from "../data";
@@ -31,6 +36,7 @@ function SingleMovie() {
   const [Reviews, setReviews] = useState([]);
   const [userReviews, setUserReviews] = useState([]);
   const [reviewText, setReviewText] = useState("");
+  const [editingId, setEditingId] = useState(null);
   const navigate = useNavigate();
 
   let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
@@ -42,22 +48,24 @@ function SingleMovie() {
     setTrailer(null);
   }, [id, isTV]);
 
-  async function fetchUserReviews() {
+  useEffect(() => {
     const q = query(
       collection(db, "reviews"),
       where("movieId", "==", String(id)),
       orderBy("createdAt", "desc"),
     );
 
-    const snapshot = await getDocs(q);
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const reviews = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    const moviereviews = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+      setUserReviews(reviews);
+    });
 
-    setUserReviews(moviereviews);
-  }
+    return () => unsubscribe();
+  }, [id]);
 
   async function fetchMovie() {
     const type = isTV ? "tv" : "movie";
@@ -69,7 +77,6 @@ function SingleMovie() {
     const moviePromise = fetch(movieUrl, options);
     const castPromise = fetch(castUrl, options);
     const reviewPromise = fetch(reviewUrl, options);
-    const userReviewPromise = fetchUserReviews();
 
     const [movieRes, castRes, reviewRes] = await Promise.all([
       moviePromise,
@@ -91,7 +98,6 @@ function SingleMovie() {
     setCast(mainCast);
     setReviews(reviewData.results.slice(0, 5));
 
-    await userReviewPromise;
   }
 
   async function submitReview() {
@@ -103,15 +109,44 @@ function SingleMovie() {
 
     if (!reviewText.trim()) return;
 
-    await addDoc(collection(db, "reviews"), {
-      movieId: String(id),
-      text: reviewText,
-      username: user.email.split("@")[0].replace(/[0-9.]/g, ""),
-      createdAt: Date.now(),
-    });
+    try {
+      if (editingId) {
+        await updateDoc(doc(db, "reviews", editingId), {
+          text: reviewText,
+        });
 
-    setReviewText("");
-    fetchUserReviews();
+        setEditingId(null);
+      } else {
+        await addDoc(collection(db, "reviews"), {
+          movieId: String(id),
+          text: reviewText,
+          username: user.email.split("@")[0].replace(/[0-9.]/g, ""),
+          userId: user.uid,
+          createdAt: Date.now(),
+        });
+      }
+
+      setReviewText("");
+    } catch (error) {
+      toast.error("Something went wrong ❌");
+    }
+  }
+
+  async function deleteReview(reviewId) {
+    const confirmDelete = window.confirm(
+      "Are you sure You want to Delete This Review?",
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "reviews", reviewId));
+
+      setUserReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    } catch (error) {}
+  }
+  function handleEdit(review) {
+    setReviewText(review.text);
+    setEditingId(review.id);
   }
 
   async function handleTrailer() {
@@ -288,12 +323,44 @@ function SingleMovie() {
             onChange={(e) => setReviewText(e.target.value)}
           />
 
-          <button onClick={submitReview}>Post Review</button>
+          <button onClick={submitReview}>
+            {editingId ? "Update Review" : "Post Review"}
+          </button>
         </div>
 
+        {editingId && (
+          <button
+            className="cancel-btn"
+            onClick={() => {
+              setEditingId(null);
+              setReviewText("");
+            }}
+          >
+            Cancel
+          </button>
+        )}
+
         {userReviews.map((r) => (
-          <div key={r.id} className="review-card">
-            <b>{r.username}</b>
+          <div className="review-card" key={r.id}>
+            <div className="review-top">
+              <b>{r.username}</b>
+
+              {user && r.userId === user.uid && (
+                <div className="review-btns">
+                  <button className="edit-btn" onClick={() => handleEdit(r)}>
+                    <MdEdit /> Edit
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteReview(r.id)}
+                  >
+                    <MdDelete /> Delete
+                  </button>
+                </div>
+              )}
+            </div>
+
             <p>{r.text}</p>
           </div>
         ))}
