@@ -11,7 +11,6 @@ function PageNotFound() {
       setCount((prev) => prev - 1);
     }, 1000);
 
-    // redirect
     const timer = setTimeout(() => {
       navigate("/");
     }, 5000);

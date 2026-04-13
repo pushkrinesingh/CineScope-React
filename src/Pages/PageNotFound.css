@@ -84,7 +84,6 @@
   box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
 }
 
-/* ===== TABLET (768px) ===== */
 @media (max-width: 768px) {
   .notfound-box {
     padding: 30px 40px;
@@ -103,7 +102,6 @@
   }
 }
 
-/* ===== MOBILE (480px) ===== */
 @media (max-width: 480px) {
   .notfound-box {
     padding: 24px 20px;

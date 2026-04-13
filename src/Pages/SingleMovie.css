@@ -454,7 +454,6 @@
   transform: scale(1.05);
 }
 
-/* ===== TABLET (768px) ===== */
 @media (max-width: 768px) {
   .backdrop {
     padding: 40px 16px;
@@ -550,7 +549,6 @@
   }
 }
 
-/* ===== MOBILE (480px) ===== */
 @media (max-width: 480px) {
   .backdrop {
     padding: 24px 12px;
