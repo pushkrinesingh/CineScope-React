@@ -28,11 +28,11 @@ const GenrePage = () => {
         setLoading(true);
         const [movieRes, tvRes] = await Promise.all([
           fetch(
-            `https://api.themoviedb.org/3/discover/movie?with_genres=${id}&page=${page}`,
+            `https://api.themoviedb.org/3/discover/movie?with_genres=${id}&page=${page}&include_adult=false`,
             options,
           ),
           fetch(
-            `https://api.themoviedb.org/3/discover/tv?with_genres=${id}&page=${page}`,
+            `https://api.themoviedb.org/3/discover/tv?with_genres=${id}&page=${page}&include_adult=false`,
             options,
           ),
         ]);
@@ -42,7 +42,24 @@ const GenrePage = () => {
           movieData.results?.map((m) => ({ ...m, media_type: "movie" })) || [];
         const tv =
           tvData.results?.map((t) => ({ ...t, media_type: "tv" })) || [];
-        const combined = [...movies, ...tv];
+        const combined = [...movies, ...tv].filter((item) => {
+          if (item.adult === true) return false;
+          const title = (item.title || item.name || "").toLowerCase();
+          const adultWords = [
+            "xxx",
+            "erotic",
+            "nude",
+            "porn",
+            "sex",
+            "hot",
+            "cock",
+            "dick",
+            "pussy",
+          ];
+          if (adultWords.some((word) => title.includes(word))) return false;
+          return true;
+        });
+
         setContent((prev) => {
           const merged = [...prev, ...combined];
           const unique = merged.filter(

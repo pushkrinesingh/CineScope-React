@@ -242,3 +242,117 @@
 .navlinks svg {
   color: #f5c518;
 }
+.mobile-icons {
+  display: none;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #f5c518;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-searchbar {
+  display: none;
+  padding: 10px 16px;
+  background: #1c1c1c;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 60px;
+  z-index: 999;
+}
+
+.mobile-searchbar .searchbar {
+  width: 100%;
+}
+
+.mobile-suggestions {
+  position: static !important;
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #1c1c1c;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 20px;
+  position: sticky;
+  top: 60px;
+  z-index: 998;
+}
+
+.mobile-menu a,
+.mobile-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 12px 0;
+  border: none;
+  background: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 2px;
+}
+
+.mobile-menu a:hover,
+.mobile-menu button:hover {
+  color: #f5c518;
+}
+
+.mobile-menu svg {
+  color: #f5c518;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 20px;
+  }
+
+  .desktop-search {
+    display: none !important; 
+  }
+
+  .desktop-nav {
+    display: none !important;  
+  }
+
+  .mobile-icons {
+    display: flex;
+  }
+
+  .mobile-searchbar {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 14px;
+    height: 60px;
+  }
+
+  .logo a {
+    font-size: 20px;
+  }
+
+  .logo svg {
+    font-size: 24px;
+  }
+}

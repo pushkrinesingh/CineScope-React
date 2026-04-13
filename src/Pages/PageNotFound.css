@@ -83,3 +83,52 @@
   transform: scale(1.05);
   box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
 }
+
+/* ===== TABLET (768px) ===== */
+@media (max-width: 768px) {
+  .notfound-box {
+    padding: 30px 40px;
+  }
+
+  .notfound-box h1 {
+    font-size: 80px;
+  }
+
+  .notfound-box h2 {
+    font-size: 22px;
+  }
+
+  .notfound-box p {
+    font-size: 15px;
+  }
+}
+
+/* ===== MOBILE (480px) ===== */
+@media (max-width: 480px) {
+  .notfound-box {
+    padding: 24px 20px;
+    border-radius: 14px;
+    width: 90%;
+  }
+
+  .notfound-box h1 {
+    font-size: 60px;
+  }
+
+  .notfound-box h2 {
+    font-size: 18px;
+  }
+
+  .notfound-box p {
+    font-size: 13px;
+  }
+
+  .countdown {
+    font-size: 16px;
+  }
+
+  .notfound-box button {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+}

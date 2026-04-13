@@ -5,8 +5,6 @@
   min-height: 100vh;
 }
 
-/* PERSON INFO */
-
 .person-info {
   display: flex;
   gap: 40px;
@@ -40,7 +38,6 @@
   max-width: 700px;
 }
 
-/* HEADING */
 
 .person-page h2 {
   margin-bottom: 25px;
@@ -58,7 +55,6 @@
   bottom: -8px;
 }
 
-/* MOVIE GRID */
 
 .movie-container {
   display: grid;
@@ -66,7 +62,6 @@
   gap: 25px;
 }
 
-/* MOVIE CARD */
 
 .movie-box {
   background: #1b1b1b;
@@ -93,7 +88,6 @@
   text-align: center;
 }
 
-/* LOAD MORE BUTTON */
 
 .load-more-btn {
   display: block;
@@ -116,7 +110,6 @@
 .load-more-btn:hover {
   background: #b20710;
 }
-/* SKELETON BASE */
 
 .skeleton {
   background: linear-gradient(
@@ -139,7 +132,6 @@
   }
 }
 
-/* PERSON SKELETON */
 
 .skeleton-img {
   width: 280px;
@@ -169,7 +161,6 @@
   margin-top: 15px;
 }
 
-/* MOVIE SKELETON */
 
 .skeleton-poster {
   width: 100%;
@@ -180,4 +171,109 @@
   width: 80%;
   height: 14px;
   margin: 10px auto;
+}
+
+@media (max-width: 768px) {
+  .person-page {
+    padding: 30px 16px;
+  }
+
+  .person-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .person-info img {
+    width: 200px;
+    height: 300px;
+  }
+
+  .person-info h1 {
+    font-size: 28px;
+  }
+
+  .person-info p {
+    font-size: 14px;
+  }
+
+  .bio {
+    max-width: 100%;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .person-page h2 {
+    font-size: 22px;
+  }
+
+  .movie-container {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .movie-box img {
+    height: 200px;
+  }
+
+  .skeleton-img {
+    width: 200px;
+    height: 300px;
+  }
+
+  .skeleton-bio {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .person-page {
+    padding: 20px 12px;
+  }
+
+  .person-info img {
+    width: 160px;
+    height: 240px;
+  }
+
+  .person-info h1 {
+    font-size: 22px;
+  }
+
+  .person-info p {
+    font-size: 13px;
+  }
+
+  .bio {
+    font-size: 13px;
+  }
+
+  .person-page h2 {
+    font-size: 18px;
+  }
+
+  .movie-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .movie-box img {
+    height: 170px;
+  }
+
+  .movie-box p {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .load-more-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .skeleton-img {
+    width: 160px;
+    height: 240px;
+  }
 }

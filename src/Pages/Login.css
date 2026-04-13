@@ -3,25 +3,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: #141414;
 }
 
-/* LOGIN BOX */
 
 .login-box {
   width: 380px;
   padding: 35px;
-
   border-radius: 12px;
-
   background: #1c1c1c;
   box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-
   text-align: center;
 }
 
-/* LOGO */
 
 .logo-of-login {
   font-size: 28px;
@@ -34,7 +28,6 @@
   gap: 8px;
 }
 
-/* TITLE */
 
 .login-box h2 {
   color: #f5f5f5;
@@ -42,7 +35,6 @@
   font-weight: 500;
 }
 
-/* FORM */
 
 .form {
   display: flex;
@@ -50,7 +42,6 @@
   gap: 15px;
 }
 
-/* INPUTS */
 
 .form input {
   padding: 12px;
@@ -72,7 +63,6 @@
   border-color: #e50914;
 }
 
-/* BUTTON */
 
 .form button {
   padding: 12px;
@@ -94,7 +84,6 @@
   background: #b20710;
 }
 
-/* SIGNUP TEXT */
 
 .signup-text {
   margin-top: 18px;
@@ -110,4 +99,49 @@
 
 .signup-text span:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    width: 350px;
+    padding: 28px;
+  }
+
+  .logo-of-login {
+    font-size: 24px;
+  }
+
+  .login-box h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    width: 350px;
+    padding: 22px 18px;
+  }
+
+  .logo-of-login {
+    font-size: 22px;
+  }
+
+  .login-box h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+
+  .form input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .form button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .signup-text {
+    font-size: 13px;
+  }
 }

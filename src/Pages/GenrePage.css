@@ -98,6 +98,7 @@
     background-position: 200% 0;
   }
 }
+
 .genre-img-wrapper {
   position: relative;
 }
@@ -136,4 +137,70 @@
 .genre-imdb-btn-added {
   background: #f5c518;
   color: #000;
+}
+
+@media (max-width: 768px) {
+  .genre-container {
+    padding: 20px 16px;
+  }
+
+  .genre-container h2 {
+    font-size: 22px;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .film-card img {
+    height: 200px;
+  }
+
+  .film-info h3 {
+    font-size: 13px;
+  }
+
+  .film-info p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genre-container {
+    padding: 16px 12px;
+  }
+
+  .genre-container h2 {
+    font-size: 18px;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .film-card img {
+    height: 170px;
+    border-radius: 10px;
+  }
+
+  .film-info {
+    padding: 8px 6px;
+  }
+
+  .film-info h3 {
+    font-size: 12px;
+  }
+
+  .film-info p {
+    font-size: 11px;
+  }
+
+  .genre-imdb-btn,
+  .genre-imdb-btn-added {
+    width: 30px;
+    height: 36px;
+    font-size: 13px;
+  }
 }

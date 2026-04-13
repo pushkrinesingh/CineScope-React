@@ -110,3 +110,53 @@
   background: #ff5a1f;
   transform: translateY(-2px);
 }
+
+@media (max-width: 768px) {
+  .profile-wrapper {
+    padding: 30px 16px;
+    align-items: flex-start;
+  }
+
+  .profile-card {
+    width: 380px;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-wrapper {
+    padding: 20px 12px;
+  }
+
+  .profile-card {
+    width: 350px;
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-image img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-card label {
+    font-size: 13px;
+  }
+
+  .profile-card input[type="text"],
+  .profile-card input[type="date"],
+  .profile-card input[type="email"] {
+    font-size: 13px;
+    padding: 9px;
+  }
+
+  .profile-card button {
+    padding: 11px;
+    font-size: 14px;
+  }
+}

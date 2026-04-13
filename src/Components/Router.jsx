@@ -163,7 +163,7 @@ function Router() {
         <Footer />
         <ToastContainer
           position="bottom-right"
-          autoClose={2000}
+          autoClose={1500}
           theme="dark"
           newestOnTop
           closeOnClick

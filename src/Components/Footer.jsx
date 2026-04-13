@@ -44,7 +44,7 @@ const Footer = () => {
               <FaInstagram />
             </a>
             <a
-              href="https://www.linkedin.com/in/pushkrine-pratap-singh-1b68a3276/"
+              href="https://www.linkedin.com/in/pushkrinesingh/"
               target="_blank"
               rel="noreferrer"
             >

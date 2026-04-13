@@ -263,3 +263,109 @@
     background: #2a2a2a;
   }
 }
+
+@media (max-width: 768px) {
+  .home-section {
+    padding: 30px 16px;
+  }
+
+  .watchlist-section {
+    padding: 20px 16px;
+  }
+
+  .home-section h2,
+  .watchlist-section h2 {
+    font-size: 22px;
+  }
+
+  .home-header {
+    margin-bottom: 20px;
+  }
+
+  .toggle-buttons button {
+    padding: 5px 14px;
+    font-size: 13px;
+  }
+
+  .movie-card {
+    min-width: 160px;
+  }
+
+  .movie-card img {
+    height: 220px;
+  }
+
+  .celeb-card {
+    min-width: 140px;
+  }
+
+  .celeb-card img {
+    width: 130px;
+    height: 130px;
+  }
+
+  .content h3 {
+    font-size: 14px;
+  }
+
+  .content p {
+    font-size: 12px;
+  }
+  .watchlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 16px;
+  }
+
+  .skeleton-img {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-section {
+    padding: 20px 12px;
+  }
+
+  .home-section h2,
+  .watchlist-section h2 {
+    font-size: 18px;
+  }
+
+  .movie-grid {
+    gap: 14px;
+  }
+
+  .movie-card {
+    min-width: 140px;
+  }
+
+  .movie-card img {
+    height: 200px;
+  }
+
+  .celeb-card {
+    min-width: 120px;
+  }
+
+  .celeb-card img {
+    width: 110px;
+    height: 110px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .content h3 {
+    font-size: 13px;
+  }
+
+   .watchlist-grid {
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 16px;
+  }
+
+  .skeleton-img {
+    height: 200px;
+  }
+}
