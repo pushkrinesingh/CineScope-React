@@ -1,217 +1,196 @@
-/* ===== ROOT COLORS ===== */
-:root {
-  --bg-dark: #0f0f0f;
-  --card-dark: #1a1a1a;
-  --yellow: #ffd54f;
-  --yellow-hover: #ffca28;
-  --text-light: #f5f5f5;
-  --text-muted: #b0b0b0;
-}
-
-/* ===== OVERLAY ===== */
 .onboarding-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
+  z-index: 10000;
   padding: 15px;
+  box-sizing: border-box;
 }
 
-/* ===== MODAL ===== */
 .onboarding-modal {
-  background: var(--card-dark);
-  color: var(--text-light);
+  background: white;
   width: 100%;
-  max-width: 550px;
-  max-height: 90vh; /* 🔥 scroll safe */
-  overflow-y: auto;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 0 30px rgba(255, 213, 79, 0.15);
-  animation: fadeIn 0.4s ease;
+  max-width: 620px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ===== HEADER ===== */
 .modal-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  position: relative;
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
-  font-size: 1.6rem;
   margin: 0;
-  text-align: center;
+  font-size: 24px;
+  color: #1a1a1a;
 }
 
 .pop-close-btn {
-  position: absolute;
-  right: 0;
-  background: transparent;
+  font-size: 32px;
+  background: none;
   border: none;
-  color: var(--yellow);
-  font-size: 1.6rem;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.pop-close-btn:hover {
-  transform: scale(1.2);
+  color: red;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .step {
-  margin-top: 20px;
+  padding: 30px 25px;
   text-align: center;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .step p {
-  color: var(--text-muted);
-  margin-bottom: 15px;
-  font-size: 0.95rem;
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: #333;
+  line-height: 1.4;
 }
 
 .gender-buttons {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
 }
 
-.gender-buttons button,
-.continue-btn {
-  background: var(--yellow);
-  color: #000;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
+.gender-buttons button {
+  padding: 16px 40px;
+  font-size: 17px;
+  border: 2px solid #0066ff;
+  background: white;
+  color: #0066ff;
+  border-radius: 50px;
   cursor: pointer;
+  transition: 0.3s;
   font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.gender-buttons button:hover,
-.continue-btn:hover {
-  background: var(--yellow-hover);
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
+.gender-buttons button:hover:not(:disabled) {
+  background: #0066ff;
+  color: white;
 }
 
 .actors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
 }
 
 .actor-card {
-  background: #111;
-  border-radius: 14px;
-  padding: 10px;
+  border-radius: 16px;
+  overflow: hidden;
   cursor: pointer;
+  border: 3px solid #f0f0f0;
   transition: all 0.3s ease;
-  border: 1px solid transparent;
+  background: #fff;
 }
 
 .actor-card:hover {
-  border: 1px solid var(--yellow);
-  transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(255, 213, 79, 0.25);
+  border-color: #0066ff;
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 102, 255, 0.15);
 }
 
 .actor-card img {
   width: 100%;
-  aspect-ratio: 1 / 1; 
+  height: 180px;
   object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid var(--yellow);
-  transition: 0.3s;
-}
-
-.actor-card:hover img {
-  transform: scale(1.05);
+  display: block;
 }
 
 .actor-card p {
-  margin-top: 8px;
-  font-size: 0.9rem;
+  margin: 12px 8px;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: #222;
 }
 
 .fun-fact {
-  background: #111;
-  padding: 12px;
-  border-radius: 10px;
-  border-left: 4px solid var(--yellow);
-  margin: 15px 0;
-  font-size: 0.95rem;
+  background: #f8f9ff;
+  padding: 22px;
+  border-radius: 14px;
+  border-left: 6px solid #0066ff;
+  text-align: left;
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 20px 0;
 }
 
 .loading {
-  font-size: 0.9rem;
-  color: var(--yellow);
+  font-size: 17px;
+  color: #0066ff;
+  font-style: italic;
+  margin: 20px 0;
 }
 
-.onboarding-modal::-webkit-scrollbar {
-  width: 6px;
-}
-
-.onboarding-modal::-webkit-scrollbar-thumb {
-  background: var(--yellow);
-  border-radius: 10px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.continue-btn {
+  margin-top: 20px;
+  padding: 16px 50px;
+  font-size: 18px;
+  background: #00cc66;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  max-width: 280px;
 }
 
 @media (max-width: 480px) {
   .onboarding-modal {
-    padding: 14px;
-    border-radius: 12px;
+    border-radius: 16px;
+    max-height: 98vh;
   }
-
+  
+  .step {
+    padding: 25px 20px;
+  }
+  
+  .modal-header {
+    padding: 18px 20px;
+  }
+  
   .modal-header h2 {
-    font-size: 1.2rem;
+    font-size: 22px;
   }
-
-  .actors-grid {
-    grid-template-columns: repeat(4, 1fr);
+  
+  .actor-card img {
+    height: 160px;
   }
-
-  .gender-buttons {
-    flex-direction: column;
-  }
-
-  .gender-buttons button,
-  .continue-btn {
-    width: 100%;
+  
+  .gender-buttons button {
+    padding: 15px 30px;
+    font-size: 16px;
   }
 }
 
-@media (min-width: 768px) {
-  .onboarding-modal {
-    max-width: 600px;
-  }
-
+@media (max-width: 360px) {
   .actors-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .onboarding-modal {
-    max-width: 650px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 14px;
   }
 }
