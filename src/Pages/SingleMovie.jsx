@@ -37,6 +37,8 @@ function SingleMovie() {
   const [userReviews, setUserReviews] = useState([]);
   const [reviewText, setReviewText] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [providers, setProviders] = useState([]);
+  const [providerLink, setProviderLink] = useState("");
   const navigate = useNavigate();
 
   let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
@@ -73,21 +75,35 @@ function SingleMovie() {
     const movieUrl = `https://api.themoviedb.org/3/${type}/${id}`;
     const castUrl = `https://api.themoviedb.org/3/${type}/${id}/credits`;
     const reviewUrl = `https://api.themoviedb.org/3/${type}/${id}/reviews`;
+    const providerUrl = `https://api.themoviedb.org/3/${type}/${id}/watch/providers`;
 
     const moviePromise = fetch(movieUrl, options);
     const castPromise = fetch(castUrl, options);
     const reviewPromise = fetch(reviewUrl, options);
+    const providerPromise = fetch(providerUrl, options);
 
-    const [movieRes, castRes, reviewRes] = await Promise.all([
+    const [movieRes, castRes, reviewRes, providerRes] = await Promise.all([
       moviePromise,
       castPromise,
       reviewPromise,
+      providerPromise,
     ]);
 
     const movieData = await movieRes.json();
     const castData = await castRes.json();
     const reviewData = await reviewRes.json();
+    const providerData = await providerRes.json();
+    const indiaProviders = providerData.results?.IN;
 
+    if (indiaProviders) {
+      setProviderLink(indiaProviders.link);
+
+      if (indiaProviders.flatrate) {
+        setProviders(indiaProviders.flatrate);
+      }
+    }
+    console.log("PROVIDER DATA:", providerData);
+    console.log("INDIA PROVIDERS:", providerData.results?.IN);
     setMovie(movieData);
 
     const mainCast = (castData.cast || [])
@@ -97,7 +113,6 @@ function SingleMovie() {
 
     setCast(mainCast);
     setReviews(reviewData.results.slice(0, 5));
-
   }
 
   async function submitReview() {
@@ -216,18 +231,44 @@ function SingleMovie() {
               {movie.overview}
             </p>
             <p className="genre">
-              <span>Genre: </span>
+              <span>Genre : </span>
               {movie.genres.map((e) => e.name).join(" , ") || "N/A"}
             </p>
 
             <p className="release">
-              Release Date: {movie.release_date || movie.first_air_date}
+              Release Date : {movie.release_date || movie.first_air_date}
             </p>
 
             <p className="rating">
-              Rating:
+              <span>Rating : </span>
               <FaStar /> {movie.vote_average?.toFixed(1)}/10
             </p>
+
+            <div className="provider-section">
+              <h2>Available On</h2>
+
+              {providers.length > 0 ? (
+                <div className="provider-list">
+                  {providers.map((p) => (
+                    <a
+                      key={p.provider_id}
+                      href={providerLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="provider-item"
+                    >
+                      <img
+                        src={`https://image.tmdb.org/t/p/w200${p.logo_path}`}
+                        alt={p.provider_name}
+                      />
+                      <span>{p.provider_name}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-provider">Not on streaming yet 🍿</p>
+              )}
+            </div>
 
             <button className="trailer-btn" onClick={handleTrailer}>
               <FaPlayCircle /> {showTrailer ? "Close Trailer" : "Watch Trailer"}

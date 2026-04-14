@@ -1,12 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { MovieContext } from "./Router";
 import { Navigate, useLocation } from "react-router-dom";
-
+import { toast } from "react-toastify";
 function ProtectedRoute({ children }) {
-  const { user,loading } = useContext(MovieContext);
+  const { user, loading } = useContext(MovieContext);
   const location = useLocation();
+
+  useEffect(() => {
+    if (!loading && !user && location.pathname !== "/login") {
+      toast.warning("Please login first ⚠️");
+    }
+  }, [user, loading]);
+
   if (loading) {
-    return <div className="auth-loader">Checking authentication...  </div>;
+    return <div className="auth-loader">Checking authentication... </div>;
   }
 
   if (!user) {

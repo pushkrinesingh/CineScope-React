@@ -18,16 +18,16 @@
   margin-bottom: 25px;
   font-size: 26px;
 }
-.footer-left h3{
+.footer-left h3 {
   position: relative;
   margin-top: 25px;
 }
-.footer-left h3 svg{
+.footer-left h3 svg {
   color: red;
 }
-.footer-left h3::after{
-    content: "";
-  width: 245px;
+.footer-left h3::after {
+  content: "";
+  width: 310px;
   height: 5px;
   background: red;
   position: absolute;
@@ -40,6 +40,12 @@
   font-size: 18px;
   line-height: 1.7;
   color: white;
+}
+.footer-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 100px;
 }
 
 .footer-links h3,
@@ -104,4 +110,79 @@
 .footer-bottom svg {
   margin-right: 5px;
   color: #f5c518;
+}
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 20px 20px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .footer-left {
+    text-align: center;
+  }
+
+  .footer-left p {
+    max-width: 100%;
+    font-size: 16px;
+    margin: 0 auto;
+  }
+
+  .footer-left h2,
+  .footer-left h3 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .footer-left h2::after {
+    width: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .footer-left h3::after {
+    width: 350px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px 20px 0 20px;
+  }
+
+  .footer-links h3,
+  .footer-socials h3 {
+    font-size: 18px;
+  }
+
+  .footer-links a {
+    font-size: 15px;
+  }
+
+  .footer-bottom {
+    font-size: 15px;
+    margin-top: 25px;
+  }
+}
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 16px 16px;
+  }
+
+  .footer-left h2 {
+    font-size: 20px;
+  }
+
+  .icons a {
+    font-size: 18px;
+  }
+
+  .footer-bottom {
+    font-size: 13px;
+  }
 }
