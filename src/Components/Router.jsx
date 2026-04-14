@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "../Pages/Home";
 import SingleMovie from "../Pages/SingleMovie";
 import Header from "./Header";
@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import GenrePage from "../Pages/GenrePage";
 import Profile from "../Pages/Profile";
 import ProtectedRoute from "./ProtectedRoute";
+import OnboardingPopup from "./OnboardingPopup";
 import {
   doc,
   setDoc,
@@ -102,6 +103,7 @@ function Router() {
       }}
     >
       <Header />
+      <OnboardingPopup/>
       <ScrollToTop />
       <Routes>
         <Route

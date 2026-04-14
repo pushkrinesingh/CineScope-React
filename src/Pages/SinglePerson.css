@@ -64,7 +64,7 @@
 
 
 .movie-box {
-  background: #1b1b1b;
+  background: linear-gradient(145deg, #141824, #0e111a);
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.3s ease;
@@ -77,17 +77,21 @@
 
 .movie-box img {
   width: 100%;
-  height: 270px;
+  height: 300px;
   object-fit: cover;
 }
 
-.movie-box p {
+.person-movie-title {
   padding: 10px;
+  text-align: center;
+}
+
+.person-movie-date{
+    padding: 10px;
   font-size: 14px;
   color: #ddd;
   text-align: center;
 }
-
 
 .load-more-btn {
   display: block;

@@ -100,8 +100,18 @@ function SinglePerson() {
                 alt={movie.title}
               />
             </Link>
-
-            <p>{movie.title}</p>
+<h3 className="person-movie-title">{movie.title}</h3>
+             <p className="person-movie-date">
+                    {movie.release_date || movie.first_air_date
+                      ? new Date(
+                          movie.release_date || movie.first_air_date,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "2-digit",
+                        })
+                      : ""}
+                  </p>
           </div>
         ))}
       </div>

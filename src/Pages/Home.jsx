@@ -118,6 +118,7 @@ function Home({ urls, heading, btn1, btn2 }) {
                             await AddToWatchlist(item);
                           }
                         }}
+                        title="Add To WatchList"
                       >
                         {IsInWatchlist(item.id) ? <FaCheck /> : <FaPlus />}
                       </button>

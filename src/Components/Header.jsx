@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BiSolidCameraMovie } from "react-icons/bi";
+import { MdOutlineLogin } from "react-icons/md";
 import { FaBookmark, FaSearch, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { options } from "../data";
 import "./Header.css";
@@ -189,9 +190,9 @@ const Header = () => {
           <Link to="/profile"><FaUser /> Profile</Link>
           <Link to="/watchlist"><FaBookmark />Watchlist</Link>
           {user ? (
-            <button className="logout" onClick={handleLogout}>Logout</button>
+            <button className="logout" onClick={handleLogout}> <MdOutlineLogin/>Logout</button>
           ) : (
-            <Link to="/login">Login</Link>
+            <Link to="/login"> <MdOutlineLogin/> Login</Link>
           )}
         </div>
 

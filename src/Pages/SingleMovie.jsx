@@ -102,8 +102,6 @@ function SingleMovie() {
         setProviders(indiaProviders.flatrate);
       }
     }
-    console.log("PROVIDER DATA:", providerData);
-    console.log("INDIA PROVIDERS:", providerData.results?.IN);
     setMovie(movieData);
 
     const mainCast = (castData.cast || [])
@@ -244,6 +242,12 @@ function SingleMovie() {
               <FaStar /> {movie.vote_average?.toFixed(1)}/10
             </p>
 
+            <p className="language">
+              <span>Language : </span>
+              {movie.spoken_languages?.map((e) => e.english_name).join(", ") ||
+                "N/A"}
+            </p>
+
             <div className="provider-section">
               <h2>Available On</h2>
 
@@ -261,7 +265,6 @@ function SingleMovie() {
                         src={`https://image.tmdb.org/t/p/w200${p.logo_path}`}
                         alt={p.provider_name}
                       />
-                      <span>{p.provider_name}</span>
                     </a>
                   ))}
                 </div>
@@ -355,56 +358,68 @@ function SingleMovie() {
             <p>{rev.content.slice(0, 300)}...</p>
           </div>
         ))}
-        <h3>Post Your Reviews</h3>
+        <div className="user-reviews">
+          <h4>User Reviews</h4>
+          {userReviews.length === 0 ? (
+            <p>No user reviews yet</p>
+          ) : (
+            userReviews.map((r) => (
+              <div className="review-card" key={r.id}>
+                <div className="review-top">
+                  <b>{r.username}</b>
 
-        <div className="review-input">
-          <textarea
-            placeholder="Write your review..."
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-          />
+                  {user && r.userId === user.uid && (
+                    <div className="review-btns">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(r)}
+                        title="Edit Your Review"
+                      >
+                        <MdEdit />
+                      </button>
 
-          <button onClick={submitReview}>
-            {editingId ? "Update Review" : "Post Review"}
-          </button>
-        </div>
-
-        {editingId && (
-          <button
-            className="cancel-btn"
-            onClick={() => {
-              setEditingId(null);
-              setReviewText("");
-            }}
-          >
-            Cancel
-          </button>
-        )}
-
-        {userReviews.map((r) => (
-          <div className="review-card" key={r.id}>
-            <div className="review-top">
-              <b>{r.username}</b>
-
-              {user && r.userId === user.uid && (
-                <div className="review-btns">
-                  <button className="edit-btn" onClick={() => handleEdit(r)}>
-                    <MdEdit /> Edit
-                  </button>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteReview(r.id)}
-                  >
-                    <MdDelete /> Delete
-                  </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteReview(r.id)}
+                        title="Delete Your Review"
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            <p>{r.text}</p>
+                <p>{r.text}</p>
+              </div>
+            ))
+          )}
+
+          <h3>Post Your Reviews</h3>
+
+          <div className="review-input">
+            <textarea
+              placeholder="Write your review..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            />
+
+            <button onClick={submitReview}>
+              {editingId ? "Update Review" : "Post Review"}
+            </button>
           </div>
-        ))}
+
+          {editingId && (
+            <button
+              className="cancel-btn"
+              onClick={() => {
+                setEditingId(null);
+                setReviewText("");
+              }}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

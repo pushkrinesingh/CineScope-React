@@ -81,7 +81,7 @@
 }
 
 .genre span {
-  font-size: 20px;
+  font-size: 18px;
   color: #ffd84d;
   font-weight: 700;
 }
@@ -99,8 +99,8 @@
   font-size: 18px;
   font-weight: 600;
 }
-.rating span{
-  font-size: 20px;
+.rating span {
+  font-size: 18px;
   color: #f5c518;
   font-weight: 700;
 }
@@ -110,6 +110,17 @@
   margin: 0 5px;
 }
 
+.language {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.language span {
+  font-size: 18px;
+  color: #f5c518;
+  font-weight: 700;
+}
 .trailer-btn,
 .watchlist-btn {
   margin-top: 10px;
@@ -362,9 +373,16 @@
   margin-top: 30px;
   position: relative;
 }
+.review-section h4 {
+  font-size: 36px;
+  color: white;
+  margin: 30px 0 30px 0;
+  position: relative;
+}
 
 .review-section h2::after,
-.review-section h3::after {
+.review-section h3::after,
+.review-section h4::after {
   content: "";
   width: 50px;
   height: 4px;
@@ -396,6 +414,12 @@
 .review-card b {
   color: #f5c518;
   font-size: 16px;
+}
+
+.user-reviews p {
+  color: #ddd;
+  font-size: 15px;
+  margin-top: 8px;
 }
 
 .review-card p {
@@ -541,7 +565,7 @@
 .provider-list {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
+  /* flex-direction: column; */
   gap: 10px;
 }
 .provider-section h2 {
@@ -556,12 +580,11 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  /* background: rgba(255, 255, 255, 0.05); */
   text-decoration: none;
   color: white;
-
-  flex: 1 1 160px;
-  min-width: 140px;
+  /* flex: 1 1 160px; */
+  /* min-width: 140px; */
   max-width: 220px;
 
   transition: 0.2s ease;
@@ -629,10 +652,15 @@
 
   .genre,
   .release,
-  .rating {
+  .rating,
+  .language {
     font-size: 15px;
   }
-
+  .genre span,
+  .rating span,
+  .language span {
+    font-size: 15px;
+  }
   .trailer-btn,
   .watchlist-btn {
     font-size: 14px;
