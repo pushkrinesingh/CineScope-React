@@ -4,8 +4,9 @@
   align-items: center;
   padding: 0 40px;
   height: 70px;
-  background: linear-gradient(135deg, #141414, #1c1c1c);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(0);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -16,14 +17,15 @@
   align-items: center;
   gap: 8px;
   font-size: 25px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 1px;
   color: #fff;
   text-decoration: none;
 }
 
 .logo svg {
   font-size: 30px;
-  color: #f5c518;
+  color: var(--accent);
   transition: all 0.3s ease;
 }
 
@@ -34,18 +36,19 @@
 .searchbar {
   display: flex;
   align-items: center;
-  background: #595f64;
-  border-radius: 30px;
+  background: #232323;
+  border-radius: 50px;
   padding: 0 12px;
   width: 50%;
   height: 38px;
   position: relative;
-  border: 2px solid transparent;
-  transition: border 0.3s ease;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
 }
 
 .searchbar:focus-within {
-  border: 2px solid #f5c518;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .searchbar input {
@@ -55,10 +58,11 @@
   background: transparent;
   padding: 8px;
   font-size: 15px;
+  color: #fff;
 }
 
 .searchbar input::placeholder {
-  color: #f9f7f7;
+  color: #888;
 }
 
 .searchbar button {
@@ -122,8 +126,10 @@
   top: 110%;
   left: 0;
   width: 100%;
-  background: #1c1f2b;
-  border-radius: 12px;
+  background: #1c1c1c;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px;
   max-height: 400px;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
@@ -159,7 +165,7 @@
 }
 
 .suggestion-item:hover {
-  background: #2a2e3f;
+    background: #2a2a2a;
 }
 
 .suggestion-item.active {
@@ -238,6 +244,13 @@
 .navlinks button:hover::after {
   width: 100%;
 }
+.nav-item.active {
+  color: #f5c518 !important;
+}
+
+.nav-item.active::after {
+  width: 100% !important;
+}
 
 .navlinks svg {
   color: #f5c518;
@@ -262,7 +275,7 @@
   display: none;
   padding: 10px 16px;
   background: #1c1c1c;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 60px;
   z-index: 999;
@@ -282,7 +295,7 @@
   display: none;
   flex-direction: column;
   background: #1c1c1c;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 10px 20px;
   position: sticky;
   top: 60px;
@@ -300,7 +313,7 @@
   padding: 12px 0;
   border: none;
   background: none;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   cursor: pointer;
   transition: color 0.3s ease;
   font-family: "Bebas Neue", sans-serif;
@@ -319,14 +332,24 @@
 @media (max-width: 768px) {
   .header {
     padding: 0 20px;
+    height: 65px;
+  }
+
+  .ai-mood-bar {
+    padding: 10px 20px;
+  }
+
+  .mood-float-btn {
+    padding: 9px 20px;
+    font-size: 14.5px;
   }
 
   .desktop-search {
-    display: none !important; 
+    display: none !important;
   }
 
   .desktop-nav {
-    display: none !important;  
+    display: none !important;
   }
 
   .mobile-icons {
@@ -346,6 +369,10 @@
   .header {
     padding: 0 14px;
     height: 60px;
+  }
+
+  .ai-mood-bar {
+    padding: 9px 14px;
   }
 
   .logo a {

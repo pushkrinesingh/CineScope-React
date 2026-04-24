@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link,NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BiSolidCameraMovie } from "react-icons/bi";
 import { MdOutlineLogin } from "react-icons/md";
 import { FaBookmark, FaSearch, FaUser, FaBars, FaTimes } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { options } from "../data";
 import "./Header.css";
 import { MovieContext } from "./Router";
 import { useRef } from "react";
+import MoodRecommender from "./MoodRecommender";
 
 const dummyPoster = "https://via.placeholder.com/92x138?text=No+Image";
 
@@ -15,8 +16,8 @@ const Header = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [genres, setGenres] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);       // 👈 hamburger
-  const [searchOpen, setSearchOpen] = useState(false);   // 👈 search toggle
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef(null);
   const { handleLogout, user } = useContext(MovieContext);
   const navigate = useNavigate();
@@ -26,7 +27,6 @@ const Header = () => {
     ? location.pathname.split("/")[2]
     : "";
 
-  // Close menu on route change
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
@@ -37,8 +37,12 @@ const Header = () => {
     const parts = text.split(new RegExp(`(${query})`, "gi"));
     return parts.map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? (
-        <span key={index} className="highlight">{part}</span>
-      ) : (part),
+        <span key={index} className="highlight">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
     );
   }
 
@@ -73,30 +77,56 @@ const Header = () => {
     const delay = setTimeout(async () => {
       try {
         const [movieRes, tvRes, personRes] = await Promise.all([
-          fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`, options),
-          fetch(`https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(query)}`, options),
-          fetch(`https://api.themoviedb.org/3/search/person?query=${encodeURIComponent(query)}`, options),
+          fetch(
+            `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`,
+            options,
+          ),
+          fetch(
+            `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(query)}`,
+            options,
+          ),
+          fetch(
+            `https://api.themoviedb.org/3/search/person?query=${encodeURIComponent(query)}`,
+            options,
+          ),
         ]);
         const movieData = await movieRes.json();
         const tvData = await tvRes.json();
         const personData = await personRes.json();
-        const movies = movieData.results?.map((m) => ({ ...m, media_type: "movie" })) || [];
-        const tv = tvData.results?.map((t) => ({ ...t, media_type: "tv" })) || [];
-        const people = personData.results?.map((p) => ({ ...p, media_type: "person" })) || [];
+        const movies =
+          movieData.results?.map((m) => ({ ...m, media_type: "movie" })) || [];
+        const tv =
+          tvData.results?.map((t) => ({ ...t, media_type: "tv" })) || [];
+        const people =
+          personData.results?.map((p) => ({ ...p, media_type: "person" })) ||
+          [];
         let collectionMovies = [];
         if (movies.length > 0) {
           const movieId = movies[0].id;
-          const detailRes = await fetch(`https://api.themoviedb.org/3/movie/${movieId}`, options);
+          const detailRes = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}`,
+            options,
+          );
           const detailData = await detailRes.json();
           if (detailData.belongs_to_collection) {
             const collectionId = detailData.belongs_to_collection.id;
-            const collectionRes = await fetch(`https://api.themoviedb.org/3/collection/${collectionId}`, options);
+            const collectionRes = await fetch(
+              `https://api.themoviedb.org/3/collection/${collectionId}`,
+              options,
+            );
             const collectionData = await collectionRes.json();
-            collectionMovies = collectionData.parts?.map((m) => ({ ...m, media_type: "movie" })) || [];
+            collectionMovies =
+              collectionData.parts?.map((m) => ({
+                ...m,
+                media_type: "movie",
+              })) || [];
           }
         }
         const combined = [...collectionMovies, ...movies, ...tv, ...people];
-        const unique = combined.filter((item, index, self) => index === self.findIndex((t) => t.id === item.id));
+        const unique = combined.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.id === item.id),
+        );
         const sorted = unique.sort((a, b) => b.popularity - a.popularity);
         setSuggestions(sorted);
       } catch (err) {
@@ -119,9 +149,14 @@ const Header = () => {
   }
 
   function handleKeyDown(e) {
-    if (e.key === "ArrowDown") setActiveIndex((prev) => (prev + 1 < suggestions.length ? prev + 1 : 0));
-    if (e.key === "ArrowUp") setActiveIndex((prev) => (prev - 1 >= 0 ? prev - 1 : suggestions.length - 1));
-    if (e.key === "Enter" && activeIndex >= 0) handleClick(suggestions[activeIndex]);
+    if (e.key === "ArrowDown")
+      setActiveIndex((prev) => (prev + 1 < suggestions.length ? prev + 1 : 0));
+    if (e.key === "ArrowUp")
+      setActiveIndex((prev) =>
+        prev - 1 >= 0 ? prev - 1 : suggestions.length - 1,
+      );
+    if (e.key === "Enter" && activeIndex >= 0)
+      handleClick(suggestions[activeIndex]);
   }
 
   return (
@@ -145,7 +180,9 @@ const Header = () => {
             >
               <option value="">All</option>
               {genres.map((genre) => (
-                <option key={genre.id} value={genre.id}>{genre.name}</option>
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
+                </option>
               ))}
             </select>
           </div>
@@ -156,7 +193,9 @@ const Header = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button><FaSearch /></button>
+          <button>
+            <FaSearch />
+          </button>
           {suggestions.length > 0 && (
             <div className="suggestions">
               {suggestions.map((item, index) => (
@@ -168,16 +207,23 @@ const Header = () => {
                   <img
                     src={
                       item.media_type === "person"
-                        ? item.profile_path ? `https://image.tmdb.org/t/p/w92${item.profile_path}` : dummyPoster
-                        : item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : dummyPoster
+                        ? item.profile_path
+                          ? `https://image.tmdb.org/t/p/w92${item.profile_path}`
+                          : dummyPoster
+                        : item.poster_path
+                          ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
+                          : dummyPoster
                     }
                     alt={item.title || item.name}
                   />
                   <div>
                     <p>{highlightText(item.title || item.name, query)}</p>
                     <span>
-                      {item.media_type === "person" ? "Celebrity" : item.media_type}{" "}
-                      • {(item.release_date || item.first_air_date)?.slice(0, 4)}
+                      {item.media_type === "person"
+                        ? "Celebrity"
+                        : item.media_type}{" "}
+                      •{" "}
+                      {(item.release_date || item.first_air_date)?.slice(0, 4)}
                     </span>
                   </div>
                 </div>
@@ -187,17 +233,30 @@ const Header = () => {
         </div>
 
         <div className="navlinks desktop-nav">
-          <Link to="/profile"><FaUser /> Profile</Link>
-          <Link to="/watchlist"><FaBookmark />Watchlist</Link>
+          <NavLink to="/profile" className="nav-item">
+            <FaUser /> Profile
+          </NavLink>
+
+          <NavLink to="/watchlist" className="nav-item">
+            <FaBookmark /> Watchlist
+          </NavLink>
+
           {user ? (
-            <button className="logout" onClick={handleLogout}> <MdOutlineLogin/>Logout</button>
+            <button className="logout" onClick={handleLogout}>
+              <MdOutlineLogin /> Logout
+            </button>
           ) : (
-            <Link to="/login"> <MdOutlineLogin/> Login</Link>
+            <NavLink to="/login" className="nav-item">
+              <MdOutlineLogin /> Login
+            </NavLink>
           )}
         </div>
 
         <div className="mobile-icons">
-          <button className="icon-btn" onClick={() => setSearchOpen(!searchOpen)}>
+          <button
+            className="icon-btn"
+            onClick={() => setSearchOpen(!searchOpen)}
+          >
             <FaSearch />
           </button>
           <button className="icon-btn" onClick={() => setMenuOpen(!menuOpen)}>
@@ -205,6 +264,7 @@ const Header = () => {
           </button>
         </div>
       </header>
+       
 
       {searchOpen && (
         <div className="mobile-searchbar" ref={searchRef}>
@@ -219,7 +279,9 @@ const Header = () => {
               >
                 <option value="">All</option>
                 {genres.map((genre) => (
-                  <option key={genre.id} value={genre.id}>{genre.name}</option>
+                  <option key={genre.id} value={genre.id}>
+                    {genre.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -231,7 +293,9 @@ const Header = () => {
               onKeyDown={handleKeyDown}
               autoFocus
             />
-            <button><FaSearch /></button>
+            <button>
+              <FaSearch />
+            </button>
           </div>
           {suggestions.length > 0 && (
             <div className="suggestions mobile-suggestions">
@@ -244,16 +308,23 @@ const Header = () => {
                   <img
                     src={
                       item.media_type === "person"
-                        ? item.profile_path ? `https://image.tmdb.org/t/p/w92${item.profile_path}` : dummyPoster
-                        : item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : dummyPoster
+                        ? item.profile_path
+                          ? `https://image.tmdb.org/t/p/w92${item.profile_path}`
+                          : dummyPoster
+                        : item.poster_path
+                          ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
+                          : dummyPoster
                     }
                     alt={item.title || item.name}
                   />
                   <div>
                     <p>{highlightText(item.title || item.name, query)}</p>
                     <span>
-                      {item.media_type === "person" ? "Celebrity" : item.media_type}{" "}
-                      • {(item.release_date || item.first_air_date)?.slice(0, 4)}
+                      {item.media_type === "person"
+                        ? "Celebrity"
+                        : item.media_type}{" "}
+                      •{" "}
+                      {(item.release_date || item.first_air_date)?.slice(0, 4)}
                     </span>
                   </div>
                 </div>
@@ -265,12 +336,22 @@ const Header = () => {
 
       {menuOpen && (
         <div className="mobile-menu">
-          <Link to="/profile"><FaUser /> Profile</Link>
-          <Link to="/watchlist"><FaBookmark /> Watchlist</Link>
+          <NavLink to="/profile" className="nav-item">
+            <FaUser /> Profile
+          </NavLink>
+
+          <NavLink to="/watchlist" className="nav-item">
+            <FaBookmark /> Watchlist
+          </NavLink>
+
           {user ? (
-            <button className="logout" onClick={handleLogout}>Logout</button>
+            <button className="logout" onClick={handleLogout}>
+              Logout
+            </button>
           ) : (
-            <Link to="/login">Login</Link>
+            <NavLink to="/login" className="nav-item">
+              Login
+            </NavLink>
           )}
         </div>
       )}

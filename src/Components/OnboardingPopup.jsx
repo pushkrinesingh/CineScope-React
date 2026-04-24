@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { MovieContext } from './Router';
 import './OnboardingPopup.css';
+import { options } from '../data';
 
-const TMDB_API_KEY = import.meta.env.VITE_API_KEY; 
 
 const OnboardingPopup = () => {
   const { user } = useContext(MovieContext);
@@ -51,7 +51,7 @@ const OnboardingPopup = () => {
       const fetchImage = async (name) => {
         try {
           const searchRes = await fetch(
-            `https://api.themoviedb.org/3/search/person?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}`
+            `https://api.themoviedb.org/3/search/person&query=${encodeURIComponent(name)}`,options
           );
           const searchData = await searchRes.json();
           

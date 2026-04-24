@@ -45,7 +45,8 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 100px;
+  gap: 200px;
+  padding: 0 35px;
 }
 
 .footer-links h3,
@@ -153,6 +154,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 10px 20px 0 20px;
+    gap: 10px;
   }
 
   .footer-links h3,

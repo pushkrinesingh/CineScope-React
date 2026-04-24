@@ -26,6 +26,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import MoodRecommender from "./MoodRecommender";
 export const MovieContext = createContext(null);
 
 function Router() {
@@ -103,6 +104,7 @@ function Router() {
       }}
     >
       <Header />
+      <MoodRecommender/>
       <OnboardingPopup/>
       <ScrollToTop />
       <Routes>

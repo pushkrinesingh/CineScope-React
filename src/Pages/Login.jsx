@@ -17,6 +17,7 @@ const Login = () => {
   const nextPath = searchParams.get("next") || "/";
   const location = useLocation();
   const pendingMovie = location.state?.pendingMovie || null;
+  const openMood = location.state?.openMood || false;
 
   async function handleSignup(email, password) {
     if (password !== confirmPassword) {
@@ -26,11 +27,14 @@ const Login = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-    
+
       alert("Signup successful ✅");
       navigate(nextPath, {
-      state: { pendingMovie }, 
-    });
+        state: {
+          pendingMovie,
+          openMood: openMood,
+        },
+      });
     } catch (err) {
       alert(err.message);
     }
@@ -39,12 +43,14 @@ const Login = () => {
   async function handleLogin(email, password) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      
 
       alert("Login successful ✅");
       navigate(nextPath, {
-      state: { pendingMovie }, 
-    });
+        state: {
+          pendingMovie,
+          openMood: openMood,
+        },
+      });
     } catch (err) {
       alert(err.message);
     }

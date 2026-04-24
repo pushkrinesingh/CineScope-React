@@ -1,14 +1,21 @@
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { baseImageUrl } from "../data";
 import "./SinglePerson.css";
 import { options } from "../data";
+import { MovieContext } from "../Components/Router";
+import { FaCheck, FaPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 function SinglePerson() {
   const { id } = useParams();
 
   const [person, setPerson] = useState(null);
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(10);
+  const { AddToWatchlist, IsInWatchlist, user } = useContext(MovieContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     async function fetchPerson() {
@@ -26,10 +33,10 @@ function SinglePerson() {
         const movieData = await movieRes.json();
 
         setPerson(personData);
+
         const sortedMovies = (movieData.cast || [])
           .filter((m) => m.poster_path)
           .sort((a, b) => b.popularity - a.popularity);
-        
 
         setMovies(sortedMovies);
       } catch (error) {
@@ -94,24 +101,47 @@ function SinglePerson() {
       <div className="movie-container">
         {movies.slice(0, visibleCount).map((movie) => (
           <div key={movie.id} className="movie-box">
+            <div className="person-img-wrapper">
             <Link to={`/movie/${movie.id}`}>
               <img
                 src={`${baseImageUrl}${movie.poster_path}`}
                 alt={movie.title}
               />
             </Link>
-<h3 className="person-movie-title">{movie.title}</h3>
-             <p className="person-movie-date">
-                    {movie.release_date || movie.first_air_date
-                      ? new Date(
-                          movie.release_date || movie.first_air_date,
-                        ).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "2-digit",
-                        })
-                      : ""}
-                  </p>
+            <button
+              className={IsInWatchlist(movie.id) ? "person-imdb-btn-added" : "person-imdb-btn"}
+              onClick={async (e) => {
+                e.preventDefault();
+                if (!user) {
+                  toast.warning("Please login first ⚠️");
+                  navigate(`/login?next=${location.pathname}`, {
+                    state: { pendingMovie: movie },
+                  });
+                  return;
+                }
+                if (IsInWatchlist(movie.id)) {
+                  await RemoveFromWatchlist(movie.id);
+                } else {
+                  await AddToWatchlist(movie);
+                }
+              }}
+              title="Add To WatchList"
+            >
+              {IsInWatchlist(movie.id) ? <FaCheck /> : <FaPlus />}
+            </button>
+            </div>
+            <h3 className="person-movie-title">{movie.title}</h3>
+            <p className="person-movie-date">
+              {movie.release_date || movie.first_air_date
+                ? new Date(
+                    movie.release_date || movie.first_air_date,
+                  ).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "2-digit",
+                  })
+                : ""}
+            </p>
           </div>
         ))}
       </div>

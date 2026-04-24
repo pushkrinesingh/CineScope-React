@@ -102,7 +102,7 @@
 }
 
 .movie-card:hover {
-  transform: translateY(-10px) scale(1.05);
+  transform: scale(1.05);
   box-shadow:
     0 15px 40px rgba(0, 0, 0, 0.9),
     0 0 20px rgba(245, 197, 24, 0.2);
@@ -149,10 +149,10 @@
 .imdb-btn,
 .imdb-btn-added {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 36px;
-  height: 42px;
+  top: -2px;
+  left: -2px;
+  width: 40px;
+  height: 45px;
   border-radius: 0 0 5px 5px;
   border: none;
   display: flex;
@@ -167,7 +167,6 @@
 .imdb-btn {
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  backdrop-filter: blur(4px);
 }
 
 .imdb-btn:hover {

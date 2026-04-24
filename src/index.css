@@ -1,3 +1,17 @@
+:root {
+  --bg-main: #141414;
+  --bg-secondary: #1c1c1c;
+  --bg-elevated: #232323;
+
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+
+  --accent: #f5c518; 
+  --accent-soft: rgba(245, 197, 24, 0.15);
+
+  --border: rgba(255,255,255,0.08);
+}
+
 * {
   margin: 0;
   padding: 0;

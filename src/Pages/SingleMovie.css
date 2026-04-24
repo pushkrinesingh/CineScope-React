@@ -97,7 +97,7 @@
   color: white;
   margin-bottom: 15px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
 }
 .rating span {
   font-size: 18px;
@@ -110,6 +110,17 @@
   margin: 0 5px;
 }
 
+.director span {
+  font-size: 18px;
+  color: #f5c518;
+  font-weight: 700;
+}
+.director {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 500;
+}
 .language {
   color: white;
   margin-bottom: 15px;
@@ -653,12 +664,14 @@
   .genre,
   .release,
   .rating,
-  .language {
+  .language,
+  .director {
     font-size: 15px;
   }
   .genre span,
   .rating span,
-  .language span {
+  .language span,
+  .director span {
     font-size: 15px;
   }
   .trailer-btn,
@@ -697,7 +710,8 @@
   }
 
   .review-section h2,
-  .review-section h3 {
+  .review-section h3,
+  .review-section h4 {
     font-size: 26px;
   }
 
@@ -758,7 +772,9 @@
 
   .genre,
   .release,
-  .rating {
+  .rating,
+  .language,
+  .director {
     font-size: 13px;
   }
 
@@ -794,7 +810,8 @@
   }
 
   .review-section h2,
-  .review-section h3 {
+  .review-section h3,
+  .review-section h4 {
     font-size: 22px;
   }
 

@@ -68,6 +68,10 @@
   line-height: 1.4;
 }
 
+.step h3{
+  font-size: 22px;
+}
+
 .gender-buttons {
   display: flex;
   flex-direction: column;
@@ -150,7 +154,7 @@
   margin-top: 20px;
   padding: 16px 50px;
   font-size: 18px;
-  background: #00cc66;
+  background: #1a9457;
   color: white;
   border: none;
   border-radius: 50px;

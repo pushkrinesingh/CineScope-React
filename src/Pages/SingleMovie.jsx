@@ -39,6 +39,7 @@ function SingleMovie() {
   const [editingId, setEditingId] = useState(null);
   const [providers, setProviders] = useState([]);
   const [providerLink, setProviderLink] = useState("");
+  const [director, setDirector] = useState("");
   const navigate = useNavigate();
 
   let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
@@ -103,6 +104,10 @@ function SingleMovie() {
       }
     }
     setMovie(movieData);
+
+    const crew = castData.crew || [];
+    const directorObj = crew.find((member) => member.job === "Director");
+    setDirector(directorObj?.name || "N/A");
 
     const mainCast = (castData.cast || [])
       .filter((actor) => actor.profile_path)
@@ -230,7 +235,7 @@ function SingleMovie() {
             </p>
             <p className="genre">
               <span>Genre : </span>
-              {movie.genres.map((e) => e.name).join(" , ") || "N/A"}
+              {movie.genres.map((e) => e.name).join(" | ") || "N/A"}
             </p>
 
             <p className="release">
@@ -240,6 +245,11 @@ function SingleMovie() {
             <p className="rating">
               <span>Rating : </span>
               <FaStar /> {movie.vote_average?.toFixed(1)}/10
+            </p>
+
+            <p className="director">
+              <span>Director : </span>
+              {director}
             </p>
 
             <p className="language">
