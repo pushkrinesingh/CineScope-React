@@ -68,9 +68,12 @@ const Header = () => {
   }
 }
 
- useEffect(() => {
+useEffect(() => {
   async function fetchTheme() {
-    if (!user) return;
+    if (!user) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      return;
+    }
 
     try {
       const docRef = doc(db, "users", user.uid);
@@ -85,6 +88,7 @@ const Header = () => {
       }
     } catch (err) {
       console.error(err);
+      document.documentElement.setAttribute("data-theme", "dark");
     }
   }
 
