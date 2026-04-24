@@ -101,6 +101,26 @@
   text-decoration: underline;
 }
 
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 60px;
+}
+
+.password-field span {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #f5c518;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .login-box {
     width: 350px;

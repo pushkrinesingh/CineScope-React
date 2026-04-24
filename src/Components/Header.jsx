@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link,NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BiSolidCameraMovie } from "react-icons/bi";
-import { MdOutlineLogin } from "react-icons/md";
+import { MdOutlineLogin, MdDarkMode, MdLightMode } from "react-icons/md";
 import { FaBookmark, FaSearch, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { options } from "../data";
 import "./Header.css";
 import { MovieContext } from "./Router";
 import { useRef } from "react";
 import MoodRecommender from "./MoodRecommender";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const dummyPoster = "https://via.placeholder.com/92x138?text=No+Image";
 
 const Header = () => {
+  const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -45,6 +48,49 @@ const Header = () => {
       ),
     );
   }
+
+  async function toggleTheme() {
+  const newTheme = theme === "dark" ? "light" : "dark";
+
+  setTheme(newTheme);
+  document.documentElement.setAttribute("data-theme", newTheme);
+
+  if (!user) return;
+
+  try {
+    const docRef = doc(db, "users", user.uid);
+
+    await updateDoc(docRef, {
+      theme: newTheme,
+    });
+  } catch (err) {
+    console.error("Theme update failed", err);
+  }
+}
+
+ useEffect(() => {
+  async function fetchTheme() {
+    if (!user) return;
+
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const snap = await getDoc(docRef);
+
+      if (snap.exists()) {
+        const savedTheme = snap.data().theme || "dark";
+        setTheme(savedTheme);
+        document.documentElement.setAttribute("data-theme", savedTheme);
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  fetchTheme();
+}, [user]);
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -169,6 +215,13 @@ const Header = () => {
           </Link>
         </div>
 
+        <button
+          className="theme-toggle"
+          onClick={toggleTheme}
+        >
+          {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+        </button>
+
         <div className="searchbar desktop-search" ref={searchRef}>
           <div className="genre-inline">
             <select
@@ -264,7 +317,6 @@ const Header = () => {
           </button>
         </div>
       </header>
-       
 
       {searchOpen && (
         <div className="mobile-searchbar" ref={searchRef}>

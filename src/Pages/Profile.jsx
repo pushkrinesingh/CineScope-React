@@ -13,6 +13,7 @@ const Profile = () => {
     gender: "",
     phone: "",
     email: "",
+    photo: "",
   });
 
   const [isEditing, setIsEditing] = useState(true);
@@ -21,6 +22,29 @@ const Profile = () => {
   const [image, setImage] = useState(
     "https://cdn-icons-png.flaticon.com/512/149/149071.png",
   );
+
+  async function uploadImageToCloudinary(file) {
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "cinescope_upload");
+    data.append("cloud_name", "CineScope");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/CineScope/image/upload",
+        {
+          method: "POST",
+          body: data,
+        },
+      );
+
+      const result = await res.json();
+      return result.secure_url;
+    } catch (err) {
+      console.error("Upload error:", err);
+      return null;
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -33,10 +57,31 @@ const Profile = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setForm(docSnap.data());
+          const data = docSnap.data();
+
+          setForm({
+            name: data.name || "",
+            email: data.email || "",
+            dob: data.dob || "",
+            gender: data.gender || "",
+            phone: data.phone || "",
+            photo: data.photo || "",
+          });
+
+          if (data.photo) {
+            setImage(data.photo);
+          }
+
           setProfileExists(true);
           setIsEditing(false);
         } else {
+          setForm({
+            name: user.displayName || "",
+            email: user.email || "",
+            dob: "",
+            gender: "",
+            phone: "",
+          });
           setProfileExists(false);
           setIsEditing(true);
         }
@@ -55,11 +100,19 @@ const Profile = () => {
     });
   }
 
-  function handleImage(e) {
+  async function handleImage(e) {
     const file = e.target.files[0];
+    if (!file) return;
 
-    if (file) {
-      setImage(URL.createObjectURL(file));
+    setImage(URL.createObjectURL(file));
+
+    const imageUrl = await uploadImageToCloudinary(file);
+
+    if (imageUrl) {
+      setForm((prev) => ({
+        ...prev,
+        photo: imageUrl,
+      }));
     }
   }
 
@@ -95,7 +148,7 @@ const Profile = () => {
     <div className="profile-wrapper">
       <div className="profile-card">
         <div className="profile-image">
-          <img src={image} alt="profile" />
+          <img src={form.photo || image} alt="profile" />
 
           <label className="edit-icon">
             <FaCamera />
@@ -173,14 +226,14 @@ const Profile = () => {
             placeholder="example@email.com"
             value={form.email}
             onChange={handleChange}
-            disabled={!isEditing && profileExists}
+            disabled={true}
           />
 
           <button
-            type="button" 
+            type="button"
             onClick={(e) => {
               if (isEditing) {
-                handleSubmit(e); 
+                handleSubmit(e);
               } else {
                 setIsEditing(true);
               }

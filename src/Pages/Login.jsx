@@ -7,11 +7,18 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { MovieContext } from "../Components/Router";
+import { updateProfile } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState("");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const nextPath = searchParams.get("next") || "/";
@@ -26,9 +33,25 @@ const Login = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      await updateProfile(userCred.user, {
+        displayName: name,
+      });
+
+      await setDoc(doc(db, "users", userCred.user.uid), {
+        name: name,
+        email: email,
+        theme: "dark",
+        createdAt: serverTimestamp(),
+      });
 
       alert("Signup successful ✅");
+
       navigate(nextPath, {
         state: {
           pendingMovie,
@@ -90,7 +113,15 @@ const Login = () => {
             }
           }}
         >
-          {isSignup && <input type="text" placeholder="Enter Name" required />}
+          {isSignup && (
+            <input
+              type="text"
+              placeholder="Enter Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          )}
 
           <input
             required
@@ -99,22 +130,36 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            required
-            type="password"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          {isSignup && (
+          <div className="password-field">
             <input
               required
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+
+            <span onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
+          {isSignup && (
+            <div className="password-field">
+              <input
+                required
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+
+              <span
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
           )}
           {!isSignup && (
             <p
