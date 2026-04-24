@@ -96,7 +96,7 @@
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
-  color: #000;
+  color: #fff;
   font-size: 32px;
   pointer-events: none;
 }
@@ -107,18 +107,19 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #000;
+  color: #fff;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  padding-right: 20px;
-  width: 55px;
+  padding: 15px 22px;
+  width: 70px;
 }
 
 .genre-inline option {
-  background: #1c1f2b;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(0);
   color: #fff;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .suggestions {

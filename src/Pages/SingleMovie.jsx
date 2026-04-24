@@ -21,6 +21,7 @@ import {
   doc,
   updateDoc,
   onSnapshot,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { options } from "../data";
@@ -140,7 +141,7 @@ function SingleMovie() {
           text: reviewText,
           username: user.email.split("@")[0].replace(/[0-9.]/g, ""),
           userId: user.uid,
-          createdAt: Date.now(),
+          createdAt: serverTimestamp(),
         });
       }
 

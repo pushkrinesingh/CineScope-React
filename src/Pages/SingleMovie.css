@@ -522,8 +522,8 @@
 
 .review-btns {
   position: absolute;
-  top: 0;
-  right: 15px;
+  top: 3px;
+  right: 20px;
   display: flex;
 }
 
@@ -535,7 +535,6 @@
   border: none;
   background: rgba(245, 197, 24, 0.15);
   color: #f5c518;
-  font-size: 15px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -543,7 +542,10 @@
   cursor: pointer;
   transition: all 0.25s ease;
 }
+.edit-btn svg{
+  font-size: 20px;
 
+}
 .edit-btn:hover {
   background: rgba(245, 197, 24, 0.25);
   transform: scale(1.05);
@@ -556,13 +558,16 @@
   border: none;
   background: rgba(218, 59, 59, 0.15);
   color: #ff4d4d;
-  font-size: 15px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 5px;
   cursor: pointer;
   transition: all 0.25s ease;
+}
+.delete-btn svg{
+  font-size: 20px;
+
 }
 
 .delete-btn:hover {
