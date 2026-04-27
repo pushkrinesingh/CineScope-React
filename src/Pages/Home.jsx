@@ -10,7 +10,8 @@ import { options } from "../data";
 
 function Home({ urls, heading, btn1, btn2 }) {
   const [movieData, setMovieData] = useState([]);
-  const [showData, setShowData] = useState(urls);
+  // ✅ FIX: sirf pehli URL se start karo, dono nahi
+  const [activeUrl, setActiveUrl] = useState(urls[0]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,12 +22,10 @@ function Home({ urls, heading, btn1, btn2 }) {
     async function fetchMovies() {
       try {
         setLoading(true);
-        const response = await Promise.all(
-          showData.map((url) => fetch(url, options)),
-        );
-        const result = await Promise.all(response.map((res) => res.json()));
-        const combinedData = result.flatMap((r) => r.results || []);
-        setMovieData(combinedData);
+        // ✅ FIX: ek waqt mein sirf ek URL fetch karo
+        const response = await fetch(activeUrl, options);
+        const result = await response.json();
+        setMovieData(result.results || []);
       } catch (error) {
         console.error("Error fetching movies:", error);
       } finally {
@@ -35,14 +34,14 @@ function Home({ urls, heading, btn1, btn2 }) {
     }
 
     fetchMovies();
-  }, [showData]);
+  }, [activeUrl]);
 
   function trimContent(content) {
     if (!content) return "";
     return content.length > 20 ? content.slice(0, 20) + "..." : content;
   }
 
-  const isPerson = showData.some((url) => url.includes("person"));
+  const isPerson = activeUrl.includes("person");
 
   return (
     <section className="home-section">
@@ -51,14 +50,14 @@ function Home({ urls, heading, btn1, btn2 }) {
         {!isPerson && (
           <div className="toggle-buttons">
             <button
-              className={showData[0] === urls[0] ? "active-btn" : ""}
-              onClick={() => setShowData([urls[0]])}
+              className={activeUrl === urls[0] ? "active-btn" : ""}
+              onClick={() => setActiveUrl(urls[0])}
             >
               {btn1}
             </button>
             <button
-              className={showData[0] === urls[1] ? "active-btn" : ""}
-              onClick={() => setShowData([urls[1]])}
+              className={activeUrl === urls[1] ? "active-btn" : ""}
+              onClick={() => setActiveUrl(urls[1])}
             >
               {btn2}
             </button>
@@ -77,13 +76,15 @@ function Home({ urls, heading, btn1, btn2 }) {
             </div>
           ))
         ) : movieData.length > 0 ? (
-          movieData.map((item, index) => {
+          movieData.map((item) => {
             const imagePath = item.poster_path || item.profile_path;
             const title = item.title || item.name;
+            // ✅ FIX: media_type properly detect karo
+            const mediaType = item.media_type || (item.first_air_date ? "tv" : "movie");
 
             return (
               <div
-                key={index}
+                key={`${mediaType}-${item.id}`}
                 className={item.profile_path ? "celeb-card" : "movie-card"}
               >
                 {imagePath && (
@@ -92,7 +93,7 @@ function Home({ urls, heading, btn1, btn2 }) {
                       to={
                         item.profile_path
                           ? `/person/${item.id}`
-                          : `/${item.first_air_date ? "tv" : "movie"}/${item.id}`
+                          : `/${mediaType}/${item.id}`
                       }
                     >
                       <img src={`${baseImageUrl}${imagePath}`} alt={title} />

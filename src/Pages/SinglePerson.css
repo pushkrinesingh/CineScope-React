@@ -1,10 +1,11 @@
 .person-page {
   padding: 50px 40px;
-  background: linear-gradient(135deg, #141414, #1c1c1c);
-  color: white;
+  background: var(--bg-main); /* FIX */
+  color: var(--text-primary); /* FIX */
   min-height: 100vh;
 }
 
+/* ===== PERSON INFO ===== */
 .person-info {
   display: flex;
   gap: 40px;
@@ -17,16 +18,17 @@
   height: 420px;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  box-shadow: var(--card-shadow); /* FIX */
 }
 
 .person-info h1 {
   font-size: 38px;
   margin-bottom: 15px;
+  color: var(--text-primary); /* FIX */
 }
 
 .person-info p {
-  color: #ccc;
+  color: var(--text-secondary); /* FIX */
   margin-bottom: 8px;
   font-size: 15px;
 }
@@ -34,47 +36,69 @@
 .bio {
   margin-top: 20px;
   line-height: 1.7;
-  color: #aaa;
+  color: var(--text-muted); /* FIX */
   max-width: 700px;
 }
 
-
+/* ===== SECTION TITLE ===== */
 .person-page h2 {
   margin-bottom: 25px;
   font-size: 28px;
   position: relative;
+  color: var(--text-primary); /* FIX */
 }
 
 .person-page h2::after {
   content: "";
   width: 50px;
   height: 3px;
-  background: #f5c518;
+  background: var(--accent); /* FIX */
   position: absolute;
   left: 0;
   bottom: -8px;
 }
 
-
+/* ===== MOVIES GRID ===== */
 .movie-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 25px;
 }
 
-
 .movie-box {
-  background: linear-gradient(145deg, #141824, #0e111a);
+  background: var(--bg-card); /* FIX */
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.3s ease;
   cursor: pointer;
+  border: 1px solid var(--border); /* FIX */
 }
 
 .movie-box:hover {
   transform: translateY(-6px);
 }
 
+.movie-box img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* ===== MOVIE TEXT ===== */
+.person-movie-title {
+  padding: 10px;
+  text-align: center;
+  color: var(--text-primary); /* FIX */
+}
+
+.person-movie-date {
+  padding: 10px;
+  font-size: 14px;
+  color: var(--text-secondary); /* FIX */
+  text-align: center;
+}
+
+/* ===== IMDB BUTTON ===== */
 .person-img-wrapper {
   position: relative;
 }
@@ -98,38 +122,20 @@
 }
 
 .person-imdb-btn {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.5); 
+  color: var(--text-primary);
 }
 
 .person-imdb-btn:hover {
-  background: #f5c518;
+  background: var(--accent); 
   color: #000;
 }
 
 .person-imdb-btn-added {
-  background: #f5c518;
+  background: var(--accent); 
   color: #000;
 }
 
-
-.movie-box img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-}
-
-.person-movie-title {
-  padding: 10px;
-  text-align: center;
-}
-
-.person-movie-date{
-    padding: 10px;
-  font-size: 14px;
-  color: #ddd;
-  text-align: center;
-}
 
 .load-more-btn {
   display: block;
@@ -139,8 +145,8 @@
   border: none;
   border-radius: 6px;
 
-  background: #e50914;
-  color: white;
+  background: var(--accent);
+  color: #000; 
 
   font-size: 15px;
   font-weight: 600;
@@ -150,15 +156,15 @@
 }
 
 .load-more-btn:hover {
-  background: #b20710;
+  opacity: 0.8;
 }
 
 .skeleton {
   background: linear-gradient(
     90deg,
-    #2a2a2a 25%,
-    #3a3a3a 37%,
-    #2a2a2a 63%
+    var(--bg-skeleton) 25%,
+    var(--bg-skeleton-shine) 37%,
+    var(--bg-skeleton) 63%
   );
   background-size: 400% 100%;
   animation: skeleton-loading 1.4s ease infinite;
@@ -173,7 +179,6 @@
     background-position: 0 50%;
   }
 }
-
 
 .skeleton-img {
   width: 280px;
@@ -202,7 +207,6 @@
   height: 120px;
   margin-top: 15px;
 }
-
 
 .skeleton-poster {
   width: 100%;

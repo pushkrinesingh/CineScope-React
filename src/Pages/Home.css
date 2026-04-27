@@ -169,7 +169,7 @@
 }
 
 .imdb-btn {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
 }
 
@@ -218,7 +218,6 @@
   display: none;
 }
 
-/* ---- Skeleton ---- */
 .skeleton {
   pointer-events: none;
 }

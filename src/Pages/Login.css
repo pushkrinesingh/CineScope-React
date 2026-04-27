@@ -3,24 +3,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #141414;
+  background: var(--bg-main);
 }
 
-
+/* ===== BOX ===== */
 .login-box {
   width: 380px;
   padding: 35px;
   border-radius: 12px;
-  background: #1c1c1c;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  background: var(--bg-elevated);
+  box-shadow: var(--card-shadow);
   text-align: center;
+  border: 1px solid var(--border);
 }
 
-
+/* ===== LOGO ===== */
 .logo-of-login {
   font-size: 28px;
   margin-bottom: 10px;
-  color: #e50914;
+  color: var(--accent);
 
   display: flex;
   align-items: center;
@@ -28,49 +29,48 @@
   gap: 8px;
 }
 
-
+/* ===== TITLE ===== */
 .login-box h2 {
-  color: #f5f5f5;
+  color: var(--text-primary);
   margin-bottom: 25px;
   font-weight: 500;
 }
 
-
+/* ===== FORM ===== */
 .form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-
 .form input {
   padding: 12px;
   border-radius: 6px;
 
-  border: 1px solid #333;
-  background: #2a2a2a;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
 
-  color: white;
+  color: var(--text-primary);
   font-size: 14px;
 }
 
 .form input::placeholder {
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .form input:focus {
   outline: none;
-  border-color: #e50914;
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent-soft);
 }
 
-
+/* ===== BUTTON ===== */
 .form button {
   padding: 12px;
   border-radius: 6px;
-
   border: none;
 
-  background: #e50914;
+  background: linear-gradient(135deg, #e50914, #ff2e2e);
   color: white;
 
   font-size: 15px;
@@ -81,18 +81,18 @@
 }
 
 .form button:hover {
-  background: #b20710;
+  transform: scale(1.03);
 }
 
-
+/* ===== SIGNUP TEXT ===== */
 .signup-text {
   margin-top: 18px;
   font-size: 14px;
-  color: #bbb;
+  color: var(--text-secondary);
 }
 
 .signup-text span {
-  color: #e50914;
+  color: var(--accent);
   cursor: pointer;
   font-weight: 500;
 }
@@ -101,6 +101,7 @@
   text-decoration: underline;
 }
 
+/* ===== PASSWORD FIELD ===== */
 .password-field {
   position: relative;
 }
@@ -117,10 +118,11 @@
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 18px;
-  color: #f5c518;
+  color: var(--accent);
   font-weight: 600;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .login-box {
     width: 350px;
@@ -138,8 +140,9 @@
 
 @media (max-width: 480px) {
   .login-box {
-    width: 350px;
+    width: 100%;
     padding: 22px 18px;
+    margin: 0 10px;
   }
 
   .logo-of-login {

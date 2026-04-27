@@ -217,7 +217,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* View Mode */}
         {!isEditing && (
           <div className="info-grid">
             <InfoCard icon={<FaUser />} label="NAME">
@@ -241,7 +240,6 @@ const Profile = () => {
           </div>
         )}
 
-        {/* Edit Mode */}
         {isEditing && (
           <div className="edit-grid">
             <div className="edit-field">

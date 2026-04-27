@@ -12,7 +12,7 @@ function SinglePerson() {
   const [person, setPerson] = useState(null);
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(10);
-  const { AddToWatchlist, IsInWatchlist, user } = useContext(MovieContext);
+  const { AddToWatchlist, IsInWatchlist,RemoveFromWatchlist, user } = useContext(MovieContext);
 
   const navigate = useNavigate();
   const location = useLocation();

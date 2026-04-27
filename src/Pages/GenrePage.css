@@ -1,27 +1,30 @@
 .genre-container {
   padding: 30px 60px;
-  background: #313132;
+  background: var(--bg-main); 
   min-height: 100vh;
-  color: white;
+  color: var(--text-primary); 
 }
+
 
 .genre-container h2 {
   font-size: 28px;
-  color: #fff;
+  color: var(--text-primary); 
   letter-spacing: 1px;
   position: relative;
   margin-bottom: 30px;
 }
-.genre-container h2::after{
-    content: "";
+
+.genre-container h2::after {
+  content: "";
   width: 100px;
   height: 4px;
-  background: #f5c518;
+  background: var(--accent); 
   position: absolute;
   left: 0;
   bottom: -8px;
   border-radius: 2px;
 }
+
 
 .genre-grid {
   display: grid;
@@ -29,14 +32,16 @@
   gap: 25px;
 }
 
+
 .film-card {
-  background-color: #000;
+  background: var(--bg-card); 
   border-radius: 12px;
   overflow: visible;
   transition: 0.3s;
   font-weight: bold;
   cursor: pointer;
   text-align: center;
+  border: 1px solid var(--border); 
 }
 
 .film-card:hover {
@@ -56,7 +61,7 @@
 
 .film-info h3 {
   font-size: 16px;
-  color: #fff;
+  color: var(--text-primary); 
   margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -65,11 +70,16 @@
 
 .film-info p {
   font-size: 13px;
-  color: #aaa;
+  color: var(--text-secondary); 
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+  background: linear-gradient(
+    90deg,
+    var(--bg-skeleton) 25%,
+    var(--bg-skeleton-shine) 50%,
+    var(--bg-skeleton) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite;
   border-radius: 8px;
@@ -99,6 +109,7 @@
   }
 }
 
+
 .genre-img-wrapper {
   position: relative;
 }
@@ -123,19 +134,22 @@
   transition: all 0.3s ease;
 }
 
+
 .genre-imdb-btn {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.5); 
+  color: var(--text-primary); 
   backdrop-filter: blur(4px);
 }
 
+
 .genre-imdb-btn:hover {
-  background: #f5c518;
+  background: var(--accent); 
   color: #000;
 }
 
+
 .genre-imdb-btn-added {
-  background: #f5c518;
+  background: var(--accent); 
   color: #000;
 }
 

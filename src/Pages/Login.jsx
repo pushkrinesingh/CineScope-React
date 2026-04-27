@@ -17,7 +17,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [name, setName] = useState("");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -148,16 +147,16 @@ const Login = () => {
             <div className="password-field">
               <input
                 required
-                type={showConfirmPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
 
               <span
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
           )}

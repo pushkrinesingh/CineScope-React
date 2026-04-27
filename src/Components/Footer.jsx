@@ -21,7 +21,14 @@ const Footer = () => {
           </p>
 
           <h3>
-            Made By <FaHeart /> Pushkrine Pratap Singh
+            <a
+              href="https://github.com/pushkrinesingh"
+              target="_blank"
+              rel="noreferrer"
+              className="footer-creator"
+            >
+              Made By <FaHeart /> Pushkrine Pratap Singh
+            </a>
           </h3>
         </div>
         <div className="footer-bottom-row">
