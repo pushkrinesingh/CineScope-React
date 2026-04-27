@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BiSolidCameraMovie } from "react-icons/bi";
 import { MdOutlineLogin, MdDarkMode, MdLightMode } from "react-icons/md";
@@ -6,15 +6,12 @@ import { FaBookmark, FaSearch, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { options } from "../data";
 import "./Header.css";
 import { MovieContext } from "./Router";
-import { useRef } from "react";
-import MoodRecommender from "./MoodRecommender";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase";
 
 const dummyPoster = "https://via.placeholder.com/92x138?text=No+Image";
 
 const Header = () => {
-  const [theme, setTheme] = useState("dark");
+  const { handleLogout, user, theme, toggleTheme } = useContext(MovieContext);
+
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -22,7 +19,6 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef(null);
-  const { handleLogout, user } = useContext(MovieContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,53 +45,6 @@ const Header = () => {
     );
   }
 
-  async function toggleTheme() {
-  const newTheme = theme === "dark" ? "light" : "dark";
-
-  setTheme(newTheme);
-  document.documentElement.setAttribute("data-theme", newTheme);
-
-  if (!user) return;
-
-  try {
-    const docRef = doc(db, "users", user.uid);
-
-    await updateDoc(docRef, {
-      theme: newTheme,
-    });
-  } catch (err) {
-    console.error("Theme update failed", err);
-  }
-}
-
-useEffect(() => {
-  async function fetchTheme() {
-    if (!user) {
-      document.documentElement.setAttribute("data-theme", "dark");
-      return;
-    }
-
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const snap = await getDoc(docRef);
-
-      if (snap.exists()) {
-        const savedTheme = snap.data().theme || "dark";
-        setTheme(savedTheme);
-        document.documentElement.setAttribute("data-theme", savedTheme);
-      } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-      }
-    } catch (err) {
-      console.error(err);
-      document.documentElement.setAttribute("data-theme", "dark");
-    }
-  }
-
-  fetchTheme();
-}, [user]);
-
-
   useEffect(() => {
     function handleClickOutside(event) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -109,12 +58,16 @@ useEffect(() => {
 
   useEffect(() => {
     async function fetchGenres() {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/genre/movie/list?language=en-US`,
-        options,
-      );
-      const data = await res.json();
-      setGenres(data.genres || []);
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/genre/movie/list?language=en-US`,
+          options,
+        );
+        const data = await res.json();
+        setGenres(data.genres || []);
+      } catch (err) {
+        console.error("Failed to fetch genres:", err);
+      }
     }
     fetchGenres();
   }, []);
@@ -140,9 +93,13 @@ useEffect(() => {
             options,
           ),
         ]);
-        const movieData = await movieRes.json();
-        const tvData = await tvRes.json();
-        const personData = await personRes.json();
+
+        const [movieData, tvData, personData] = await Promise.all([
+          movieRes.json(),
+          tvRes.json(),
+          personRes.json(),
+        ]);
+
         const movies =
           movieData.results?.map((m) => ({ ...m, media_type: "movie" })) || [];
         const tv =
@@ -150,48 +107,44 @@ useEffect(() => {
         const people =
           personData.results?.map((p) => ({ ...p, media_type: "person" })) ||
           [];
+
         let collectionMovies = [];
         if (movies.length > 0) {
-          const movieId = movies[0].id;
           const detailRes = await fetch(
-            `https://api.themoviedb.org/3/movie/${movieId}`,
+            `https://api.themoviedb.org/3/movie/${movies[0].id}`,
             options,
           );
           const detailData = await detailRes.json();
           if (detailData.belongs_to_collection) {
-            const collectionId = detailData.belongs_to_collection.id;
             const collectionRes = await fetch(
-              `https://api.themoviedb.org/3/collection/${collectionId}`,
+              `https://api.themoviedb.org/3/collection/${detailData.belongs_to_collection.id}`,
               options,
             );
             const collectionData = await collectionRes.json();
             collectionMovies =
-              collectionData.parts?.map((m) => ({
-                ...m,
-                media_type: "movie",
-              })) || [];
+              collectionData.parts?.map((m) => ({ ...m, media_type: "movie" })) || [];
           }
         }
+
         const combined = [...collectionMovies, ...movies, ...tv, ...people];
         const unique = combined.filter(
           (item, index, self) =>
             index === self.findIndex((t) => t.id === item.id),
         );
-        const sorted = unique.sort((a, b) => b.popularity - a.popularity);
-        setSuggestions(sorted);
+        setSuggestions(unique.sort((a, b) => b.popularity - a.popularity));
       } catch (err) {
-        console.error(err);
+        console.error("Search error:", err);
       }
     }, 150);
     return () => clearTimeout(delay);
   }, [query]);
 
   function handleClick(item) {
-    if (item.media_type === "person") {
-      navigate(`/person/${item.id}`);
-    } else {
-      navigate(`/${item.media_type}/${item.id}`);
-    }
+    navigate(
+      item.media_type === "person"
+        ? `/person/${item.id}`
+        : `/${item.media_type}/${item.id}`,
+    );
     setQuery("");
     setSuggestions([]);
     setActiveIndex(-1);
@@ -201,13 +154,64 @@ useEffect(() => {
   function handleKeyDown(e) {
     if (e.key === "ArrowDown")
       setActiveIndex((prev) => (prev + 1 < suggestions.length ? prev + 1 : 0));
-    if (e.key === "ArrowUp")
+    else if (e.key === "ArrowUp")
       setActiveIndex((prev) =>
         prev - 1 >= 0 ? prev - 1 : suggestions.length - 1,
       );
-    if (e.key === "Enter" && activeIndex >= 0)
+    else if (e.key === "Enter" && activeIndex >= 0)
       handleClick(suggestions[activeIndex]);
   }
+
+  const getImageSrc = (item) => {
+    if (item.media_type === "person") {
+      return item.profile_path
+        ? `https://image.tmdb.org/t/p/w92${item.profile_path}`
+        : dummyPoster;
+    }
+    return item.poster_path
+      ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
+      : dummyPoster;
+  };
+
+  const SuggestionsList = () => (
+    <div className="suggestions">
+      {suggestions.map((item, index) => (
+        <div
+          key={`${item.media_type}-${item.id}`}
+          className={`suggestion-item ${index === activeIndex ? "active" : ""}`}
+          onClick={() => handleClick(item)}
+        >
+          <img src={getImageSrc(item)} alt={item.title || item.name} />
+          <div>
+            <p>{highlightText(item.title || item.name, query)}</p>
+            <span>
+              {item.media_type === "person" ? "Celebrity" : item.media_type}
+              {" • "}
+              {(item.release_date || item.first_air_date)?.slice(0, 4)}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const GenreSelect = () => (
+    <div className="genre-inline">
+      <select
+        value={genreId}
+        onChange={(e) => {
+          e.target.value ? navigate(`/genre/${e.target.value}`) : navigate("/");
+        }}
+      >
+        <option value="">All</option>
+        {genres.map((genre) => (
+          <option key={genre.id} value={genre.id}>
+            {genre.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 
   return (
     <>
@@ -219,30 +223,8 @@ useEffect(() => {
           </Link>
         </div>
 
-        <button
-          className="theme-toggle"
-          onClick={toggleTheme}
-        >
-          {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-        </button>
-
         <div className="searchbar desktop-search" ref={searchRef}>
-          <div className="genre-inline">
-            <select
-              value={genreId}
-              onChange={(e) => {
-                if (e.target.value) navigate(`/genre/${e.target.value}`);
-                else navigate("/");
-              }}
-            >
-              <option value="">All</option>
-              {genres.map((genre) => (
-                <option key={genre.id} value={genre.id}>
-                  {genre.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <GenreSelect />
           <input
             type="text"
             placeholder="Search Movies / Series / Celebrities"
@@ -250,54 +232,19 @@ useEffect(() => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button>
+          <button type="button" aria-label="Search">
             <FaSearch />
           </button>
-          {suggestions.length > 0 && (
-            <div className="suggestions">
-              {suggestions.map((item, index) => (
-                <div
-                  key={`${item.media_type}-${item.id}`}
-                  className={`suggestion-item ${index === activeIndex ? "active" : ""}`}
-                  onClick={() => handleClick(item)}
-                >
-                  <img
-                    src={
-                      item.media_type === "person"
-                        ? item.profile_path
-                          ? `https://image.tmdb.org/t/p/w92${item.profile_path}`
-                          : dummyPoster
-                        : item.poster_path
-                          ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
-                          : dummyPoster
-                    }
-                    alt={item.title || item.name}
-                  />
-                  <div>
-                    <p>{highlightText(item.title || item.name, query)}</p>
-                    <span>
-                      {item.media_type === "person"
-                        ? "Celebrity"
-                        : item.media_type}{" "}
-                      •{" "}
-                      {(item.release_date || item.first_air_date)?.slice(0, 4)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {suggestions.length > 0 && <SuggestionsList />}
         </div>
 
         <div className="navlinks desktop-nav">
           <NavLink to="/profile" className="nav-item">
             <FaUser /> Profile
           </NavLink>
-
           <NavLink to="/watchlist" className="nav-item">
             <FaBookmark /> Watchlist
           </NavLink>
-
           {user ? (
             <button className="logout" onClick={handleLogout}>
               <MdOutlineLogin /> Logout
@@ -311,36 +258,45 @@ useEffect(() => {
 
         <div className="mobile-icons">
           <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+          </button>
+          <button
+            type="button"
             className="icon-btn"
-            onClick={() => setSearchOpen(!searchOpen)}
+            onClick={() => setSearchOpen((v) => !v)}
+            aria-label="Toggle search"
           >
             <FaSearch />
           </button>
-          <button className="icon-btn" onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
+
+        <button
+          type="button"
+          className="theme-toggle desktop-theme-toggle"
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+        >
+          {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+        </button>
       </header>
 
       {searchOpen && (
         <div className="mobile-searchbar" ref={searchRef}>
           <div className="searchbar">
-            <div className="genre-inline">
-              <select
-                value={genreId}
-                onChange={(e) => {
-                  if (e.target.value) navigate(`/genre/${e.target.value}`);
-                  else navigate("/");
-                }}
-              >
-                <option value="">All</option>
-                {genres.map((genre) => (
-                  <option key={genre.id} value={genre.id}>
-                    {genre.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <GenreSelect />
             <input
               type="text"
               placeholder="Search..."
@@ -349,7 +305,7 @@ useEffect(() => {
               onKeyDown={handleKeyDown}
               autoFocus
             />
-            <button>
+            <button type="button" aria-label="Search">
               <FaSearch />
             </button>
           </div>
@@ -361,25 +317,12 @@ useEffect(() => {
                   className={`suggestion-item ${index === activeIndex ? "active" : ""}`}
                   onClick={() => handleClick(item)}
                 >
-                  <img
-                    src={
-                      item.media_type === "person"
-                        ? item.profile_path
-                          ? `https://image.tmdb.org/t/p/w92${item.profile_path}`
-                          : dummyPoster
-                        : item.poster_path
-                          ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
-                          : dummyPoster
-                    }
-                    alt={item.title || item.name}
-                  />
+                  <img src={getImageSrc(item)} alt={item.title || item.name} />
                   <div>
                     <p>{highlightText(item.title || item.name, query)}</p>
                     <span>
-                      {item.media_type === "person"
-                        ? "Celebrity"
-                        : item.media_type}{" "}
-                      •{" "}
+                      {item.media_type === "person" ? "Celebrity" : item.media_type}
+                      {" • "}
                       {(item.release_date || item.first_air_date)?.slice(0, 4)}
                     </span>
                   </div>
@@ -395,18 +338,16 @@ useEffect(() => {
           <NavLink to="/profile" className="nav-item">
             <FaUser /> Profile
           </NavLink>
-
           <NavLink to="/watchlist" className="nav-item">
             <FaBookmark /> Watchlist
           </NavLink>
-
           {user ? (
             <button className="logout" onClick={handleLogout}>
-              Logout
+              <MdOutlineLogin /> Logout
             </button>
           ) : (
             <NavLink to="/login" className="nav-item">
-              Login
+              <MdOutlineLogin /> Login
             </NavLink>
           )}
         </div>

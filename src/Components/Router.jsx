@@ -6,14 +6,14 @@ import Footer from "./Footer";
 import { urls } from "../data";
 import Watchlist from "../Pages/Watchlist";
 import Login from "../Pages/Login";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import SinglePerson from "../Pages/SinglePerson";
 import ScrollToTop from "./ScrollToTop";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import PageNotFound from "../Pages/PageNotFound";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import GenrePage from "../Pages/GenrePage";
 import Profile from "../Pages/Profile";
 import ProtectedRoute from "./ProtectedRoute";
@@ -24,16 +24,61 @@ import {
   deleteDoc,
   collection,
   onSnapshot,
+  getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import MoodRecommender from "./MoodRecommender";
+
 export const MovieContext = createContext(null);
 
 function Router() {
   const [WatchList, setWatchList] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState("dark");
   const location = useLocation();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }, []);
+
+  useEffect(() => {
+    async function fetchTheme() {
+      if (!user) {
+        document.documentElement.setAttribute("data-theme", theme);
+        return;
+      }
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          const savedTheme = snap.data().theme || "dark";
+          setTheme(savedTheme);
+          document.documentElement.setAttribute("data-theme", savedTheme);
+        } else {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      } catch (err) {
+        console.error("Failed to fetch theme:", err);
+      }
+    }
+    fetchTheme();
+  }, [user]);
+
+  const toggleTheme = useCallback(async () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+
+    if (!user) return;
+    try {
+      const docRef = doc(db, "users", user.uid);
+      await updateDoc(docRef, { theme: newTheme });
+    } catch (err) {
+      console.error("Theme update failed:", err);
+    }
+  }, [theme, user]);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -54,13 +99,11 @@ function Router() {
       setWatchList([]);
       return;
     }
-
     const colRef = collection(db, "watchlists", user.uid, "movies-shows");
     const unsub = onSnapshot(colRef, (snapshot) => {
       const movies = snapshot.docs.map((doc) => doc.data());
       setWatchList(movies);
     });
-
     return () => unsub();
   }, [user]);
 
@@ -80,14 +123,11 @@ function Router() {
   function IsInWatchlist(id) {
     return WatchList.some((item) => item.id === id);
   }
+
   function handleLogout() {
     signOut(auth)
-      .then(() => {
-        alert("Logged out ✅");
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+      .then(() => toast.success("Logged out successfully ✅"))
+      .catch((error) => toast.error(error.message));
   }
 
   return (
@@ -101,11 +141,13 @@ function Router() {
         user,
         loading,
         handleLogout,
+        theme,
+        toggleTheme,
       }}
     >
       <Header />
-      <MoodRecommender/>
-      <OnboardingPopup/>
+      <MoodRecommender />
+      <OnboardingPopup />
       <ScrollToTop />
       <Routes>
         <Route
@@ -118,7 +160,6 @@ function Router() {
                 btn2="Week"
                 urls={[urls.trendingByDay, urls.trendingByWeek]}
               />
-
               <Home
                 heading="Popular"
                 btn1="Movies"
@@ -146,7 +187,6 @@ function Router() {
             </>
           }
         />
-
         <Route path="/movie/:id" element={<SingleMovie />} />
         <Route path="/tv/:id" element={<SingleMovie />} />
         <Route path="/person/:id" element={<SinglePerson />} />

@@ -1,8 +1,8 @@
 .footer {
-  background: linear-gradient(135deg, #141414, #1c1c1c);
-  color: #ccc;
+  background: var(--bg-footer);
+  color: var(--text-secondary);
   padding: 60px 40px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
 }
 
 .footer-container {
@@ -19,17 +19,19 @@
   font-size: 26px;
 }
 .footer-left h3 {
+  font-size: 25px;
+  color: #c5a223;
   position: relative;
   margin-top: 25px;
 }
 .footer-left h3 svg {
-  color: red;
+  color: rgb(226, 33, 33);
 }
 .footer-left h3::after {
   content: "";
-  width: 310px;
+  width: 385px;
   height: 5px;
-  background: red;
+  background: rgb(23, 146, 184);
   position: absolute;
   left: 0;
   bottom: -8px;
@@ -104,7 +106,7 @@
   margin-top: 40px;
   font-size: 18px;
   color: white;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
   padding-top: 15px;
 }
 

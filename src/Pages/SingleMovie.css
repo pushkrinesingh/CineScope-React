@@ -20,7 +20,7 @@
   display: flex;
   gap: 60px;
 
-  background: rgba(20, 20, 20, 0.8);
+  background: var(--movie-overlay);
 
   padding: 40px;
   border-radius: 20px;
@@ -55,13 +55,13 @@
 
   background: linear-gradient(90deg, #f5c518, #ffd84d);
   -webkit-background-clip: text;
-  background-clip: none;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .overview {
   font-size: 16px;
-  color: white;
+  color: var(--text-primary);
   line-height: 1.7;
   margin-bottom: 25px;
 }
@@ -76,7 +76,7 @@
 
 .genre {
   font-size: 18px;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .rating {
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 15px;
   font-size: 18px;
   font-weight: 700;
@@ -116,13 +116,13 @@
   font-weight: 700;
 }
 .director {
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 15px;
   font-size: 18px;
   font-weight: 500;
 }
 .language {
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 15px;
   font-size: 18px;
   font-weight: 600;
@@ -150,7 +150,7 @@
 
 .trailer-btn {
   background: linear-gradient(135deg, #e50914, #ff2e2e);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .trailer-btn:hover {
@@ -223,7 +223,7 @@
 
 .cast-section h2 {
   position: relative;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 25px;
   font-size: 40px;
 }
@@ -252,7 +252,7 @@
   min-width: 200px;
   text-align: center;
   text-decoration: none;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cast-img {
@@ -286,7 +286,7 @@
 }
 .no-cast-img svg {
   font-size: 120px;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cast-name {
@@ -374,19 +374,19 @@
 
 .review-section h2 {
   font-size: 36px;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 30px;
   position: relative;
 }
 .review-section h3 {
   font-size: 36px;
-  color: white;
+  color: var(--text-primary);
   margin-top: 30px;
   position: relative;
 }
 .review-section h4 {
   font-size: 36px;
-  color: white;
+  color: var(--text-primary);
   margin: 30px 0 30px 0;
   position: relative;
 }
@@ -461,7 +461,7 @@
   border-radius: 10px;
   padding: 12px 14px;
 
-  color: white;
+  color: var(--text-primary);
   font-size: 15px;
   resize: none;
 
@@ -598,7 +598,7 @@
   border-radius: 8px;
   /* background: rgba(255, 255, 255, 0.05); */
   text-decoration: none;
-  color: white;
+  color: var(--text-primary);
   /* flex: 1 1 160px; */
   /* min-width: 140px; */
   max-width: 220px;
