@@ -12,7 +12,8 @@ function SinglePerson() {
   const [person, setPerson] = useState(null);
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(10);
-  const { AddToWatchlist, IsInWatchlist,RemoveFromWatchlist, user } = useContext(MovieContext);
+  const { AddToWatchlist, IsInWatchlist, RemoveFromWatchlist, user } =
+    useContext(MovieContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -102,33 +103,39 @@ function SinglePerson() {
         {movies.slice(0, visibleCount).map((movie) => (
           <div key={movie.id} className="movie-box">
             <div className="person-img-wrapper">
-            <Link to={`/movie/${movie.id}`}>
-              <img
-                src={`${baseImageUrl}${movie.poster_path}`}
-                alt={movie.title}
-              />
-            </Link>
-            <button
-              className={IsInWatchlist(movie.id) ? "person-imdb-btn-added" : "person-imdb-btn"}
-              onClick={async (e) => {
-                e.preventDefault();
-                if (!user) {
-                  toast.warning("Please login first ⚠️");
-                  navigate(`/login?next=${location.pathname}`, {
-                    state: { pendingMovie: movie },
-                  });
-                  return;
+              <Link
+                to={`/${movie.media_type === "tv" || movie.first_air_date ? "tv" : "movie"}/${movie.id}`}
+              >
+                <img
+                  src={`${baseImageUrl}${movie.poster_path}`}
+                  alt={movie.title}
+                />
+              </Link>
+              <button
+                className={
+                  IsInWatchlist(movie.id)
+                    ? "person-imdb-btn-added"
+                    : "person-imdb-btn"
                 }
-                if (IsInWatchlist(movie.id)) {
-                  await RemoveFromWatchlist(movie.id);
-                } else {
-                  await AddToWatchlist(movie);
-                }
-              }}
-              title="Add To WatchList"
-            >
-              {IsInWatchlist(movie.id) ? <FaCheck /> : <FaPlus />}
-            </button>
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (!user) {
+                    toast.warning("Please login first ⚠️");
+                    navigate(`/login?next=${location.pathname}`, {
+                      state: { pendingMovie: movie },
+                    });
+                    return;
+                  }
+                  if (IsInWatchlist(movie.id)) {
+                    await RemoveFromWatchlist(movie.id);
+                  } else {
+                    await AddToWatchlist(movie);
+                  }
+                }}
+                title="Add To WatchList"
+              >
+                {IsInWatchlist(movie.id) ? <FaCheck /> : <FaPlus />}
+              </button>
             </div>
             <h3 className="person-movie-title">{movie.title}</h3>
             <p className="person-movie-date">

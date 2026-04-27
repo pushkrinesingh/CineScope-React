@@ -19,12 +19,12 @@ const WatchList = () => {
       <div className="movie-grid watchlist-grid">
         {WatchList.length > 0 ? (
           WatchList.map((item) => {
-            const isTV = item.name !== undefined;
+           const mediaType = item.media_type || (item.first_air_date ? "tv" : "movie");
 
             return (
               <div key={item.id} className="movie-card">
                 {item.poster_path && (
-                  <Link to={`/${isTV ? "tv" : "movie"}/${item.id}`}>
+                  <Link to={`/${mediaType}/${item.id}`}>
                     <img
                       src={`${baseImageUrl}${item.poster_path}`}
                       alt={item.title || item.name}

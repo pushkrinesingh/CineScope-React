@@ -92,7 +92,7 @@ function Router() {
     if (user && location.state?.pendingMovie) {
       AddToWatchlist(location.state.pendingMovie);
     }
-  }, [user]);
+  }, [user,AddToWatchlist]);
 
   useEffect(() => {
     if (!user) {
@@ -168,9 +168,7 @@ function Router() {
               />
               <Home
                 heading="Trending Celebrities"
-                btn1="Day"
-                btn2="Week"
-                urls={[urls.trendingCelebrities, urls.trendingCelebrities]}
+                urls={[urls.trendingCelebrities]}
               />
               <Home
                 heading="Top Rated"

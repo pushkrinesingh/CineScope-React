@@ -152,14 +152,9 @@ function SingleMovie() {
   }
 
   async function deleteReview(reviewId) {
-    const confirmDelete = window.confirm(
-      "Are you sure You want to Delete This Review?",
-    );
-    if (!confirmDelete) return;
-
     try {
       await deleteDoc(doc(db, "reviews", reviewId));
-
+      toast.success("Review deleted");
       setUserReviews((prev) => prev.filter((r) => r.id !== reviewId));
     } catch (error) {}
   }
@@ -259,6 +254,20 @@ function SingleMovie() {
                 "N/A"}
             </p>
 
+            {isTV && (
+              <>
+                <p className="season">
+                  <span>Seasons : </span>
+                  {movie.number_of_seasons || "N/A"}
+                </p>
+
+                <p className="episodes">
+                  <span>Total Episodes : </span>
+                  {movie.number_of_episodes || "N/A"}
+                </p>
+              </>
+            )}
+
             <div className="provider-section">
               <h2>Available On</h2>
 
@@ -302,7 +311,10 @@ function SingleMovie() {
                 if (IsInWatchlist(movie.id)) {
                   await RemoveFromWatchlist(movie.id);
                 } else {
-                  await AddToWatchlist(movie);
+                  await AddToWatchlist({
+                    ...movie,
+                    media_type: isTV ? "tv" : "movie",
+                  });
                 }
               }}
             >

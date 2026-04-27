@@ -122,14 +122,20 @@ const Header = () => {
             );
             const collectionData = await collectionRes.json();
             collectionMovies =
-              collectionData.parts?.map((m) => ({ ...m, media_type: "movie" })) || [];
+              collectionData.parts?.map((m) => ({
+                ...m,
+                media_type: "movie",
+              })) || [];
           }
         }
 
         const combined = [...collectionMovies, ...movies, ...tv, ...people];
         const unique = combined.filter(
           (item, index, self) =>
-            index === self.findIndex((t) => t.id === item.id),
+            index ===
+            self.findIndex(
+              (t) => t.id === item.id && t.media_type === item.media_type,
+            ),
         );
         setSuggestions(unique.sort((a, b) => b.popularity - a.popularity));
       } catch (err) {
@@ -321,7 +327,9 @@ const Header = () => {
                   <div>
                     <p>{highlightText(item.title || item.name, query)}</p>
                     <span>
-                      {item.media_type === "person" ? "Celebrity" : item.media_type}
+                      {item.media_type === "person"
+                        ? "Celebrity"
+                        : item.media_type}
                       {" • "}
                       {(item.release_date || item.first_air_date)?.slice(0, 4)}
                     </span>

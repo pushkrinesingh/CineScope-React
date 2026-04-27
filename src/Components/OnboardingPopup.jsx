@@ -6,6 +6,7 @@ import { options } from "../data";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 const OnboardingPopup = () => {
   const { user } = useContext(MovieContext);
@@ -173,7 +174,7 @@ const OnboardingPopup = () => {
 
   const handleFeedback = async (type) => {
     if (!user) {
-      alert("Login required ❗");
+     toast.warning("Login required ❗");
       return;
     }
 

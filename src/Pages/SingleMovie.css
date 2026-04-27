@@ -130,6 +130,21 @@
   color: var(--accent);
   font-weight: 700;
 }
+
+.season,
+.episodes {
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.season span,
+.episodes span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .trailer-btn,
 .watchlist-btn {
   margin-top: 10px;
