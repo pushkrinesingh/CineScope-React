@@ -28,8 +28,7 @@
   max-width: 1000px;
   width: 100%;
 
-  box-shadow:
-   var(--card-shadow);
+  box-shadow: var(--card-shadow);
 }
 
 .left img {
@@ -38,8 +37,7 @@
   object-fit: cover;
   border-radius: 15px;
 
-  box-shadow:
-   var(--card-shadow);
+  box-shadow: var(--card-shadow);
 }
 
 .right {
@@ -555,9 +553,8 @@
   cursor: pointer;
   transition: all 0.25s ease;
 }
-.edit-btn svg{
+.edit-btn svg {
   font-size: 20px;
-
 }
 .edit-btn:hover {
   background: rgba(245, 197, 24, 0.25);
@@ -578,9 +575,8 @@
   cursor: pointer;
   transition: all 0.25s ease;
 }
-.delete-btn svg{
+.delete-btn svg {
   font-size: 20px;
-
 }
 
 .delete-btn:hover {
@@ -594,7 +590,7 @@
 .provider-list {
   display: flex;
   flex-wrap: wrap;
-  
+
   gap: 10px;
 }
 .provider-section h2 {
@@ -680,13 +676,17 @@
   .release,
   .rating,
   .language,
-  .director {
+  .director,
+  .season,
+  .episodes {
     font-size: 15px;
   }
   .genre span,
   .rating span,
   .language span,
-  .director span {
+  .director span,
+  .season span,
+  .episodes span {
     font-size: 15px;
   }
   .trailer-btn,
@@ -789,7 +789,8 @@
   .release,
   .rating,
   .language,
-  .director {
+  .director .season,
+  .episodes {
     font-size: 13px;
   }
 
