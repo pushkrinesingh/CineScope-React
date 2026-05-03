@@ -6,8 +6,10 @@ import { FaBookmark, FaSearch, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { options } from "../data";
 import "./Header.css";
 import { MovieContext } from "./Router";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-const dummyPoster = "https://via.placeholder.com/92x138?text=No+Image";
+const dummyPoster = "https://placehold.co/92x138?text=No+Image";
 
 const Header = () => {
   const { handleLogout, user, theme, toggleTheme } = useContext(MovieContext);
@@ -18,6 +20,8 @@ const Header = () => {
   const [genres, setGenres] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchHistory, setSearchHistory] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +34,53 @@ const Header = () => {
     setMenuOpen(false);
     setSearchOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    async function fetchHistory() {
+      if (!user) {
+        setSearchHistory([]);
+        return;
+      }
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          setSearchHistory(snap.data().searchHistory || []);
+        }
+      } catch (err) {
+        console.error("History fetch failed:", err);
+      }
+    }
+    fetchHistory();
+  }, [user]);
+
+  async function saveToHistory(query) {
+    if (!query.trim() || !user) return;
+    const updated = [query, ...searchHistory.filter((q) => q !== query)].slice(
+      0,
+      5,
+    );
+    setSearchHistory(updated);
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        searchHistory: updated,
+      });
+    } catch (err) {
+      console.error("History save failed:", err);
+    }
+  }
+
+  async function removeFromHistory(index) {
+    const updated = searchHistory.filter((_, i) => i !== index);
+    setSearchHistory(updated);
+    if (!user) return;
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        searchHistory: updated,
+      });
+    } catch (err) {
+      console.error("History remove failed:", err);
+    }
+  }
 
   function highlightText(text, query) {
     if (!query) return text;
@@ -50,6 +101,7 @@ const Header = () => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setSuggestions([]);
         setActiveIndex(-1);
+        setIsFocused(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,6 +125,10 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
+    if (query.length === 0) {
+      setSuggestions([]);
+      return;
+    }
     if (query.length < 2) {
       setSuggestions([]);
       return;
@@ -146,6 +202,7 @@ const Header = () => {
   }, [query]);
 
   function handleClick(item) {
+    saveToHistory(item.title || item.name);
     navigate(
       item.media_type === "person"
         ? `/person/${item.id}`
@@ -155,6 +212,7 @@ const Header = () => {
     setSuggestions([]);
     setActiveIndex(-1);
     setSearchOpen(false);
+    setIsFocused(false);
   }
 
   function handleKeyDown(e) {
@@ -178,6 +236,40 @@ const Header = () => {
       ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
       : dummyPoster;
   };
+
+  const SearchHistoryBox = () => (
+    <>
+      {isFocused && query.length === 0 && user && searchHistory.length > 0 && (
+        <div className="search-history">
+          <p className="history-label">Recent Searches</p>
+          <div className="history-chips">
+            {searchHistory.map((item, index) => (
+              <span key={index} className="history-chip">
+                <span onMouseDown={() => setQuery(item)}>🕐 {item}</span>
+                <button
+                  className="chip-remove"
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    removeFromHistory(index);
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {isFocused && query.length === 0 && !user && (
+        <div className="search-history">
+          <p className="history-label">
+            🔒 Login karo apni searches save karne ke liye
+          </p>
+        </div>
+      )}
+    </>
+  );
 
   const SuggestionsList = () => (
     <div className="suggestions">
@@ -237,11 +329,13 @@ const Header = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 150)}
           />
           <button type="button" aria-label="Search">
             <FaSearch />
           </button>
-          {suggestions.length > 0 && <SuggestionsList />}
+          {suggestions.length > 0 ? <SuggestionsList /> : <SearchHistoryBox />}
         </div>
 
         <div className="navlinks desktop-nav">
@@ -309,13 +403,15 @@ const Header = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 150)}
               autoFocus
             />
             <button type="button" aria-label="Search">
               <FaSearch />
             </button>
           </div>
-          {suggestions.length > 0 && (
+          {suggestions.length > 0 ? (
             <div className="suggestions mobile-suggestions">
               {suggestions.map((item, index) => (
                 <div
@@ -337,6 +433,8 @@ const Header = () => {
                 </div>
               ))}
             </div>
+          ) : (
+            <SearchHistoryBox />
           )}
         </div>
       )}

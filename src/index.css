@@ -9,6 +9,7 @@
   --bg-section: linear-gradient(135deg, #141414, #1c1c1c);
   --bg-toggle: #1c1f2b;
   --bg-searchbar: #232323;
+  --bg-searchhistory:#242323;
   --bg-suggestions: #1c1c1c;
   --bg-mobile-menu: #1c1c1c;
   --bg-skeleton: #2a2a2a;
@@ -45,6 +46,7 @@
   --bg-section: linear-gradient(135deg, #f5f5f5, #ececec);
   --bg-toggle: #e0e0e0;
   --bg-searchbar: #e8e8e8;
+  --bg-searchhistory:#ffffff;
   --bg-suggestions: #ffffff;
   --bg-mobile-menu: #ffffff;
   --bg-skeleton: #e0e0e0;

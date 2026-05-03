@@ -11,6 +11,7 @@ import { updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ const Login = () => {
 
   async function handleSignup(email, password) {
     if (password !== confirmPassword) {
-      alert("Passwords do not match ❌");
+      toast.error("Passwords do not match ❌");
       return;
     }
 
@@ -49,7 +50,7 @@ const Login = () => {
         createdAt: serverTimestamp(),
       });
 
-      alert("Signup successful ✅");
+      toast.success("Signup successful ✅"); 
 
       navigate(nextPath, {
         state: {
@@ -58,7 +59,7 @@ const Login = () => {
         },
       });
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   }
 
@@ -66,7 +67,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
-      alert("Login successful ✅");
+      toast.success("Login successful ✅");
       navigate(nextPath, {
         state: {
           pendingMovie,
@@ -74,20 +75,20 @@ const Login = () => {
         },
       });
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   }
   async function handleForgotPassword() {
     if (!email) {
-      alert("Please enter your email first ❗");
+      toast.error("Please enter your email first ❗");
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, email);
-      alert("Password reset email sent 📩");
+      toast.success("Password reset email sent 📩");
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   }
 

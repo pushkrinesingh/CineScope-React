@@ -10,7 +10,6 @@ import { options } from "../data";
 
 function Home({ urls, heading, btn1, btn2 }) {
   const [movieData, setMovieData] = useState([]);
-  // ✅ FIX: sirf pehli URL se start karo, dono nahi
   const [activeUrl, setActiveUrl] = useState(urls[0]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -22,7 +21,6 @@ function Home({ urls, heading, btn1, btn2 }) {
     async function fetchMovies() {
       try {
         setLoading(true);
-        // ✅ FIX: ek waqt mein sirf ek URL fetch karo
         const response = await fetch(activeUrl, options);
         const result = await response.json();
         setMovieData(result.results || []);
@@ -47,7 +45,7 @@ function Home({ urls, heading, btn1, btn2 }) {
     <section className="home-section">
       <header className="home-header">
         <h2>{heading}</h2>
-        {!isPerson && (
+        {!isPerson && urls[1] && btn1 && btn2 &&(
           <div className="toggle-buttons">
             <button
               className={activeUrl === urls[0] ? "active-btn" : ""}
@@ -79,7 +77,6 @@ function Home({ urls, heading, btn1, btn2 }) {
           movieData.map((item) => {
             const imagePath = item.poster_path || item.profile_path;
             const title = item.title || item.name;
-            // ✅ FIX: media_type properly detect karo
             const mediaType = item.media_type || (item.first_air_date ? "tv" : "movie");
 
             return (

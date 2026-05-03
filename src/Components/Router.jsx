@@ -89,12 +89,6 @@ function Router() {
   }, []);
 
   useEffect(() => {
-    if (user && location.state?.pendingMovie) {
-      AddToWatchlist(location.state.pendingMovie);
-    }
-  }, [user,AddToWatchlist]);
-
-  useEffect(() => {
     if (!user) {
       setWatchList([]);
       return;
@@ -107,11 +101,15 @@ function Router() {
     return () => unsub();
   }, [user]);
 
-  async function AddToWatchlist(MovieToAdd) {
-    const docId = `${MovieToAdd.media_type || (MovieToAdd.first_air_date ? "tv" : "movie")}_${MovieToAdd.id}`;
-    const docRef = doc(db, "watchlists", user.uid, "movies-shows", docId);
-    await setDoc(docRef, MovieToAdd);
-  }
+  const AddToWatchlist = useCallback(
+    async (MovieToAdd) => {
+      if (!user) return;
+      const docId = `${MovieToAdd.media_type || (MovieToAdd.first_air_date ? "tv" : "movie")}_${MovieToAdd.id}`;
+      const docRef = doc(db, "watchlists", user.uid, "movies-shows", docId);
+      await setDoc(docRef, MovieToAdd);
+    },
+    [user],
+  );
 
   async function RemoveFromWatchlist(IdToRemove) {
     const found = WatchList.find((item) => item.id === IdToRemove);
@@ -129,6 +127,12 @@ function Router() {
       .then(() => toast.success("Logged out successfully ✅"))
       .catch((error) => toast.error(error.message));
   }
+
+    useEffect(() => {
+    if (user && location.state?.pendingMovie) {
+      AddToWatchlist(location.state.pendingMovie);
+    }
+  }, [user, AddToWatchlist]);
 
   return (
     <MovieContext.Provider
