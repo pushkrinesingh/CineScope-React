@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Home from "../Pages/Home";
 import SingleMovie from "../Pages/SingleMovie";
 import Header from "./Header";
@@ -38,6 +38,7 @@ function Router() {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState("dark");
   const location = useLocation();
+  const navigate=useNavigate();
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", "dark");
@@ -113,6 +114,7 @@ function Router() {
 
   async function RemoveFromWatchlist(IdToRemove) {
     const found = WatchList.find((item) => item.id === IdToRemove);
+    if (!found) return;
     const docId = `${found.media_type || (found.first_air_date ? "tv" : "movie")}_${IdToRemove}`;
     const docRef = doc(db, "watchlists", user.uid, "movies-shows", docId);
     await deleteDoc(docRef);
@@ -131,6 +133,7 @@ function Router() {
     useEffect(() => {
     if (user && location.state?.pendingMovie) {
       AddToWatchlist(location.state.pendingMovie);
+      navigate(location.pathname, { replace: true, state: {} });
     }
   }, [user, AddToWatchlist]);
 

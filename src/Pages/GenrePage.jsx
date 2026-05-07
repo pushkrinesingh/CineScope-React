@@ -107,7 +107,7 @@ const GenrePage = () => {
                   src={
                     item.poster_path
                       ? `${baseImageUrl}${item.poster_path}`
-                      : "https://via.placeholder.com/300x450?text=No+Image"
+                      : "https://placehold.co/300x450?text=No+Image"
                   }
                   alt={item.title || item.name}
                 />

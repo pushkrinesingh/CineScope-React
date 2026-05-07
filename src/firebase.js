@@ -3,13 +3,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAiMNekGg16XP_7wBv8IgVfLXL2ARUyw_Y",
-  authDomain: "cinescope-ab6b5.firebaseapp.com",
-  projectId: "cinescope-ab6b5",
-  storageBucket: "cinescope-ab6b5.firebasestorage.app",
-  messagingSenderId: "730715543244",
-  appId: "1:730715543244:web:d428fd17b369e14aa99469",
-  measurementId: "G-49M71C1R58"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app=initializeApp(firebaseConfig);

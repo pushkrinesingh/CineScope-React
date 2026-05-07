@@ -197,7 +197,7 @@ const Header = () => {
       } catch (err) {
         console.error("Search error:", err);
       }
-    }, 150);
+    }, 400);
     return () => clearTimeout(delay);
   }, [query]);
 
@@ -264,7 +264,7 @@ const Header = () => {
       {isFocused && query.length === 0 && !user && (
         <div className="search-history">
           <p className="history-label">
-            🔒 Login karo apni searches save karne ke liye
+           Login to save your search history
           </p>
         </div>
       )}

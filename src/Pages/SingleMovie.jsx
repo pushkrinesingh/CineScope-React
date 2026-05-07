@@ -1,7 +1,13 @@
 import { useParams, useLocation, Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { baseImageUrl } from "../data";
-import { FaStar, FaPlayCircle, FaUser } from "react-icons/fa";
+import {
+  FaStar,
+  FaPlayCircle,
+  FaUser,
+  FaRegArrowAltCircleRight,
+  FaRegArrowAltCircleLeft,
+} from "react-icons/fa";
 import { BsBookmarkCheckFill, BsBookmarkPlusFill } from "react-icons/bs";
 import { ImCancelCircle } from "react-icons/im";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -40,12 +46,18 @@ function SingleMovie() {
   const [reviewText, setReviewText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [providerLink, setProviderLink] = useState("");
-  const [director, setDirector] = useState("");
+  const [creatorLabel, setCreatorLabel] = useState("");
+  const [creatorName, setCreatorName] = useState("");
   const [fetchError, setFetchError] = useState(false);
   const [streamProviders, setStreamProviders] = useState([]);
   const [rentProviders, setRentProviders] = useState([]);
   const [buyProviders, setBuyProviders] = useState([]);
+  const [ageRating, setAgeRating] = useState("N/A");
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [seasonDetails, setSeasonDetails] = useState(null);
+  const [showEpisodes, setShowEpisodes] = useState(false);
   const navigate = useNavigate();
+  const castRef = useRef(null);
 
   let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
     useContext(MovieContext);
@@ -55,6 +67,12 @@ function SingleMovie() {
     setShowTrailer(false);
     setTrailer(null);
   }, [id, isTV]);
+
+  useEffect(() => {
+    if (isTV) {
+      fetchSeasonDetails(selectedSeason);
+    }
+  }, [selectedSeason, id]);
 
   useEffect(() => {
     const q = query(
@@ -83,18 +101,52 @@ function SingleMovie() {
       const castUrl = `https://api.themoviedb.org/3/${type}/${id}/credits`;
       const reviewUrl = `https://api.themoviedb.org/3/${type}/${id}/reviews`;
       const providerUrl = `https://api.themoviedb.org/3/${type}/${id}/watch/providers`;
+      const ratingUrl = isTV
+        ? `https://api.themoviedb.org/3/tv/${id}/content_ratings`
+        : `https://api.themoviedb.org/3/movie/${id}/release_dates`;
 
-      const [movieRes, castRes, reviewRes, providerRes] = await Promise.all([
-        fetch(movieUrl, options),
-        fetch(castUrl, options),
-        fetch(reviewUrl, options),
-        fetch(providerUrl, options),
-      ]);
+      const [movieRes, castRes, reviewRes, providerRes, ratingRes] =
+        await Promise.all([
+          fetch(movieUrl, options),
+          fetch(castUrl, options),
+          fetch(reviewUrl, options),
+          fetch(providerUrl, options),
+          fetch(ratingUrl, options),
+        ]);
 
       const movieData = await movieRes.json();
       const castData = await castRes.json();
       const reviewData = await reviewRes.json();
       const providerData = await providerRes.json();
+      const ratingData = await ratingRes.json();
+
+      if (isTV) {
+        const indiaRating = ratingData.results?.find(
+          (r) => r.iso_3166_1 === "IN",
+        );
+
+        const usRating = ratingData.results?.find((r) => r.iso_3166_1 === "US");
+
+        setAgeRating(indiaRating?.rating || usRating?.rating || "N/A");
+      } else {
+        const indiaRelease = ratingData.results?.find(
+          (r) => r.iso_3166_1 === "IN",
+        );
+
+        const usRelease = ratingData.results?.find(
+          (r) => r.iso_3166_1 === "US",
+        );
+
+        const indiaCert = indiaRelease?.release_dates?.find(
+          (r) => r.certification,
+        )?.certification;
+
+        const usCert = usRelease?.release_dates?.find(
+          (r) => r.certification,
+        )?.certification;
+
+        setAgeRating(indiaCert || usCert || "N/A");
+      }
 
       const indiaProviders = providerData.results?.IN;
       if (indiaProviders) {
@@ -103,7 +155,6 @@ function SingleMovie() {
         setRentProviders(indiaProviders.rent || []);
         setBuyProviders(indiaProviders.buy || []);
       } else {
-        // ✅ Movie change hone pe reset karo
         setStreamProviders([]);
         setRentProviders([]);
         setBuyProviders([]);
@@ -113,13 +164,36 @@ function SingleMovie() {
       setMovie(movieData);
 
       const crew = castData.crew || [];
-      const directorObj = crew.find((member) => member.job === "Director");
-      setDirector(directorObj?.name || "N/A");
+
+      if (isTV) {
+        const creators = movieData.created_by
+          ?.map((person) => person.name)
+          .join(", ");
+
+        const executiveProducers = crew
+          .filter((member) => member.job === "Executive Producer")
+          .map((member) => member.name)
+          .join(", ");
+
+        setCreatorLabel("Creator");
+        setCreatorName(creators || executiveProducers || "N/A");
+      } else {
+        let directorObj = crew.find((member) => member.job === "Director");
+
+        if (!directorObj) {
+          directorObj = crew.find(
+            (member) => member.department === "Directing",
+          );
+        }
+
+        setCreatorLabel("Director");
+        setCreatorName(directorObj?.name || "N/A");
+      }
 
       const mainCast = (castData.cast || [])
         .filter((actor) => actor.profile_path)
         .sort((a, b) => a.order - b.order)
-        .slice(0, 30);
+        .slice(0, 35);
 
       setCast(mainCast);
       setReviews(reviewData.results.slice(0, 5));
@@ -127,6 +201,20 @@ function SingleMovie() {
       console.error("Failed to fetch movie:", error);
       setFetchError(true);
     }
+  }
+
+  function scrollCastLeft() {
+    castRef.current?.scrollBy({
+      left: -1050,
+      behavior: "smooth",
+    });
+  }
+
+  function scrollCastRight() {
+    castRef.current?.scrollBy({
+      left: 1050,
+      behavior: "smooth",
+    });
   }
 
   async function submitReview() {
@@ -155,7 +243,7 @@ function SingleMovie() {
       }
       setReviewText("");
     } catch (error) {
-      toast.error("Something went wrong ❌");
+      toast.error("Something went wrong ");
     }
   }
 
@@ -165,7 +253,7 @@ function SingleMovie() {
       toast.success("Review deleted");
       setUserReviews((prev) => prev.filter((r) => r.id !== reviewId));
     } catch (error) {
-      toast.error("Failed to delete review ❌");
+      toast.error("Failed to delete review ");
       console.error("Delete review error:", error);
     }
   }
@@ -197,10 +285,31 @@ function SingleMovie() {
     }
   }
 
+  async function fetchSeasonDetails(seasonNumber) {
+    try {
+      const res = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/season/${seasonNumber}`,
+        options,
+      );
+
+      const data = await res.json();
+
+      setSeasonDetails(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function handleEpisodes() {
+    await fetchSeasonDetails(selectedSeason);
+
+    setShowEpisodes(true);
+  }
+
   if (fetchError)
     return (
       <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
-        <h2>Something went wrong 😕</h2>
+        <h2>Something went wrong </h2>
         <p style={{ color: "gray" }}>
           Could not load movie details. Check your connection and try again.
         </p>
@@ -236,7 +345,11 @@ function SingleMovie() {
         <div className="single-movie">
           <div className="left">
             <img
-              src={`${baseImageUrl}${movie.poster_path}`}
+              src={
+                movie.poster_path
+                  ? `${baseImageUrl}${movie.poster_path}`
+                  : "https://placehold.co/300x450?text=No+Image"
+              }
               alt={movie.title || movie.name}
             />
           </div>
@@ -263,9 +376,19 @@ function SingleMovie() {
               <FaStar /> {movie.vote_average?.toFixed(1)}/10
             </p>
 
+            <p className="age-rating">
+              <span>Rated : </span>
+              {ageRating}
+            </p>
+
+            <p className="status">
+              <span>Status : </span>
+              {movie.status || "N/A"}
+            </p>
+
             <p className="director">
-              <span>Director : </span>
-              {director}
+              <span>{creatorLabel} : </span>
+              {creatorName}
             </p>
 
             <p className="language">
@@ -274,17 +397,79 @@ function SingleMovie() {
                 "N/A"}
             </p>
 
+            <p className="season">
+              <span>Seasons : </span>
+              {movie.number_of_seasons || "N/A"}
+            </p>
+
             {isTV && (
-              <>
-                <p className="season">
-                  <span>Seasons : </span>
-                  {movie.number_of_seasons || "N/A"}
-                </p>
-                <p className="episodes">
-                  <span>Total Episodes : </span>
-                  {movie.number_of_episodes || "N/A"}
-                </p>
-              </>
+              <div className="season-actions">
+                <select
+                  value={selectedSeason}
+                  onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                >
+                  {movie.seasons?.map((season) => (
+                    <option key={season.id} value={season.season_number}>
+                      {season.name}
+                    </option>
+                  ))}
+                </select>
+
+                <button className="episodes-btn" onClick={handleEpisodes}>
+                  View Episodes
+                </button>
+              </div>
+            )}
+
+            {showEpisodes && (
+              <div
+                className="episodes-modal"
+                onClick={() => setShowEpisodes(false)}
+              >
+                <div
+                  className="episodes-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div
+                    className="episode-close-btn"
+                    onClick={() => setShowEpisodes(false)}
+                  >
+                    <ImCancelCircle />
+                  </div>
+
+                  <h2>
+                    {movie.name} - Season {selectedSeason}
+                  </h2>
+
+                  <div className="episodes-list">
+                    {seasonDetails?.episodes?.map((ep) => (
+                      <div className="episode-card" key={ep.id}>
+                        <img
+                          src={
+                            ep.still_path
+                              ? `https://image.tmdb.org/t/p/w500${ep.still_path}`
+                              : "https://placehold.co/500x280?text=No+Image"
+                          }
+                          alt={ep.name}
+                        />
+
+                        <div className="episode-info">
+                          <h3>
+                            Episode {ep.episode_number}: {ep.name}
+                          </h3>
+
+                          <p>{ep.overview || "No description available."}</p>
+
+                          <span>
+                            ⭐ {ep.vote_average?.toFixed(1)} •{" "}
+                            {ep.runtime || "N/A"} min
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
 
             <div className="provider-section">
@@ -423,8 +608,20 @@ function SingleMovie() {
       )}
 
       <div className="cast-section">
-        <h2 className="cast-heading">Cast</h2>
-        <div className="cast-grid">
+        <div className="cast-header">
+          <h2 className="cast-heading">Cast</h2>
+
+          <div className="cast-controls">
+            <button onClick={scrollCastLeft}>
+              <FaRegArrowAltCircleLeft />
+            </button>
+            <button onClick={scrollCastRight}>
+              <FaRegArrowAltCircleRight />
+            </button>
+          </div>
+        </div>
+
+        <div className="cast-grid" ref={castRef}>
           {cast.map((actor) => (
             <Link
               key={actor.id}
@@ -443,7 +640,9 @@ function SingleMovie() {
                   </div>
                 )}
               </div>
+
               <p className="cast-name">{actor.name}</p>
+
               <span className="cast-character">as {actor.character}</span>
             </Link>
           ))}

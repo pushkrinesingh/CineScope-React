@@ -107,8 +107,12 @@ function SinglePerson() {
                 to={`/${movie.media_type === "tv" || movie.first_air_date ? "tv" : "movie"}/${movie.id}`}
               >
                 <img
-                  src={`${baseImageUrl}${movie.poster_path}`}
-                  alt={movie.title}
+                  src={
+                    person.profile_path
+                      ? `${baseImageUrl}${person.profile_path}`
+                      : "https://placehold.co/300x450?text=No+Image"
+                  }
+                  alt={person.name}
                 />
               </Link>
               <button

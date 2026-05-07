@@ -9,7 +9,7 @@ const WatchList = () => {
 
   function trimContent(content) {
     if (!content) return "";
-    return content.length > 20 ? content.slice(0, 20) + "..." : content;
+    return content.length > 30 ? content.slice(0, 30) + "..." : content;
   }
 
   return (
