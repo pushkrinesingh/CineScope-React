@@ -397,12 +397,13 @@ function SingleMovie() {
                 "N/A"}
             </p>
 
+
+            {isTV && (
+              <>
             <p className="season">
               <span>Seasons : </span>
               {movie.number_of_seasons || "N/A"}
             </p>
-
-            {isTV && (
               <div className="season-actions">
                 <select
                   value={selectedSeason}
@@ -419,6 +420,7 @@ function SingleMovie() {
                   View Episodes
                 </button>
               </div>
+              </>
             )}
 
             {showEpisodes && (
