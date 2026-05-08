@@ -112,13 +112,17 @@ function Router() {
     [user],
   );
 
-  async function RemoveFromWatchlist(IdToRemove) {
+ const RemoveFromWatchlist = useCallback(
+  async (IdToRemove) => {
+    if (!user) return;
     const found = WatchList.find((item) => item.id === IdToRemove);
     if (!found) return;
     const docId = `${found.media_type || (found.first_air_date ? "tv" : "movie")}_${IdToRemove}`;
     const docRef = doc(db, "watchlists", user.uid, "movies-shows", docId);
     await deleteDoc(docRef);
-  }
+  },
+  [user, WatchList],
+);
 
   function IsInWatchlist(id) {
     return WatchList.some((item) => item.id === id);
@@ -126,7 +130,7 @@ function Router() {
 
   function handleLogout() {
     signOut(auth)
-      .then(() => toast.success("Logged out successfully ✅"))
+      .then(() => toast.success("Logged out successfully"))
       .catch((error) => toast.error(error.message));
   }
 
@@ -135,7 +139,7 @@ function Router() {
       AddToWatchlist(location.state.pendingMovie);
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [user, AddToWatchlist]);
+  }, [user,location,navigate, AddToWatchlist]);
 
   return (
     <MovieContext.Provider

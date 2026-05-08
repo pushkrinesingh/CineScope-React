@@ -5,7 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { FaPlus, FaCheck } from "react-icons/fa";
 import { MovieContext } from "../Components/Router";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { options } from "../data";
 
 function Home({ urls, heading, btn1, btn2 }) {
@@ -104,7 +103,6 @@ function Home({ urls, heading, btn1, btn2 }) {
                         onClick={async (e) => {
                           e.preventDefault();
                           if (!user) {
-                            toast.warning("Please login first ⚠️");
                             navigate(`/login?next=${location.pathname}`, {
                               state: { pendingMovie: item },
                             });

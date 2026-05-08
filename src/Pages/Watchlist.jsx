@@ -22,7 +22,7 @@ const WatchList = () => {
            const mediaType = item.media_type || (item.first_air_date ? "tv" : "movie");
 
             return (
-              <div key={item.id} className="movie-card">
+              <div key={`${mediaType}-${item.id}`} className="movie-card">
                 {item.poster_path && (
                   <Link to={`/${mediaType}/${item.id}`}>
                     <img

@@ -138,7 +138,7 @@ const Profile = () => {
     setUploading(false);
     if (cloudUrl) {
       setForm((prev) => ({ ...prev, photo: cloudUrl }));
-      toast.success("Photo uploaded ✅");
+      toast.success("Photo uploaded");
       const user = auth.currentUser;
       if (user) {
         await setDoc(
@@ -148,7 +148,7 @@ const Profile = () => {
         );
       }
     } else {
-      toast.error("Photo upload failed ❌");
+      toast.error("Photo upload failed");
     }
   }
 
@@ -164,12 +164,12 @@ const Profile = () => {
     }
     try {
       await setDoc(doc(db, "users", user.uid), form, { merge: true });
-      toast.success("Profile saved ✅");
+      toast.success("Profile saved");
       setIsEditing(false);
       setProfileExists(true);
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong ❌");
+      toast.error("Something went wrong");
     }
   }
 

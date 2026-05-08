@@ -28,7 +28,7 @@ const Login = () => {
 
   async function handleSignup(email, password) {
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match ❌");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -50,7 +50,7 @@ const Login = () => {
         createdAt: serverTimestamp(),
       });
 
-      toast.success("Signup successful ✅"); 
+      toast.success("Signup successful"); 
 
       navigate(nextPath, {
         state: {
@@ -67,7 +67,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
-      toast.success("Login successful ✅");
+      toast.success("Login successful");
       navigate(nextPath, {
         state: {
           pendingMovie,
@@ -80,13 +80,13 @@ const Login = () => {
   }
   async function handleForgotPassword() {
     if (!email) {
-      toast.error("Please enter your email first ❗");
+      toast.error("Please enter your email first!");
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, email);
-      toast.success("Password reset email sent 📩");
+      toast.success("Password reset email sent");
     } catch (err) {
       toast.error(err.message);
     }

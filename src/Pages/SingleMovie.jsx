@@ -81,13 +81,19 @@ function SingleMovie() {
       orderBy("createdAt", "desc"),
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const reviews = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setUserReviews(reviews);
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const reviews = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setUserReviews(reviews);
+      },
+      (error) => {
+        console.error("Reviews listener error:", error);
+      },
+    );
 
     return () => unsubscribe();
   }, [id]);
@@ -262,26 +268,31 @@ function SingleMovie() {
     setReviewText(review.text);
     setEditingId(review.id);
   }
-
   async function handleTrailer() {
     if (showTrailer) {
       setShowTrailer(false);
       return;
     }
 
-    const type = isTV ? "tv" : "movie";
-    const res = await fetch(
-      `https://api.themoviedb.org/3/${type}/${id}/videos`,
-      options,
-    );
-    const data = await res.json();
-    const trailer = data.results.find(
-      (vid) => vid.type === "Trailer" && vid.site === "YouTube",
-    );
+    try {
+      const type = isTV ? "tv" : "movie";
+      const res = await fetch(
+        `https://api.themoviedb.org/3/${type}/${id}/videos`,
+        options,
+      );
+      const data = await res.json();
+      const trailer = data.results.find(
+        (vid) => vid.type === "Trailer" && vid.site === "YouTube",
+      );
 
-    if (trailer) {
-      setTrailer(trailer.key);
-      setShowTrailer(true);
+      if (trailer) {
+        setTrailer(trailer.key);
+        setShowTrailer(true);
+      } else {
+        toast.info("No trailer available for this title.");
+      }
+    } catch (error) {
+      toast.error("Failed to load trailer. Try again.");
     }
   }
 
@@ -397,29 +408,28 @@ function SingleMovie() {
                 "N/A"}
             </p>
 
-
             {isTV && (
               <>
-            <p className="season">
-              <span>Seasons : </span>
-              {movie.number_of_seasons || "N/A"}
-            </p>
-              <div className="season-actions">
-                <select
-                  value={selectedSeason}
-                  onChange={(e) => setSelectedSeason(Number(e.target.value))}
-                >
-                  {movie.seasons?.map((season) => (
-                    <option key={season.id} value={season.season_number}>
-                      {season.name}
-                    </option>
-                  ))}
-                </select>
+                <p className="season">
+                  <span>Seasons : </span>
+                  {movie.number_of_seasons || "N/A"}
+                </p>
+                <div className="season-actions">
+                  <select
+                    value={selectedSeason}
+                    onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                  >
+                    {movie.seasons?.map((season) => (
+                      <option key={season.id} value={season.season_number}>
+                        {season.name}
+                      </option>
+                    ))}
+                  </select>
 
-                <button className="episodes-btn" onClick={handleEpisodes}>
-                  View Episodes
-                </button>
-              </div>
+                  <button className="episodes-btn" onClick={handleEpisodes}>
+                    View Episodes
+                  </button>
+                </div>
               </>
             )}
 
@@ -565,7 +575,6 @@ function SingleMovie() {
               className="watchlist-btn"
               onClick={async () => {
                 if (!user) {
-                  toast.warning("Please login first ⚠️");
                   navigate(`/login?next=${location.pathname}`, {
                     state: { pendingMovie: movie },
                   });
@@ -665,7 +674,11 @@ function SingleMovie() {
         {Reviews.map((rev) => (
           <div key={rev.id} className="review-card">
             <b>{rev.author}</b>
-            <p>{rev.content.slice(0, 300)}...</p>
+            <p>
+              {rev.content.length > 300
+                ? rev.content.slice(0, 300) + "..."
+                : rev.content}
+            </p>
           </div>
         ))}
 

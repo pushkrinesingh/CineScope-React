@@ -1030,7 +1030,8 @@
   .age-rating span,
   .language span,
   .director span,
-  .status span .season span {
+  .status span,
+  .season span {
     font-size: 15px;
   }
   .season-actions {
@@ -1165,6 +1166,7 @@
     font-size: 1.4rem;
   }
 }
+
 @media (max-width: 480px) {
   .backdrop {
     padding: 24px 12px;
@@ -1183,18 +1185,17 @@
   .right h1 {
     font-size: 22px;
   }
-
-  .overview {
-    font-size: 13px;
-  }
-
+  
+  .overview,
   .genre,
   .release,
   .rating,
   .age-rating,
   .language,
-  .director .status .season {
-    font-size: 13px;
+  .director,
+  .status,
+  .season {
+    font-size: 15px;
   }
 
   .episodes-content {

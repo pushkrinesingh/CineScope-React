@@ -6,7 +6,6 @@ import { options } from "../data";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
-import { toast } from "react-toastify";
 
 const OnboardingPopup = () => {
   const { user } = useContext(MovieContext);
@@ -94,14 +93,35 @@ const OnboardingPopup = () => {
       console.error(error);
       setRandomMaleActors([
         {
-          name: "Shah Rukh Khan",
-          image:
-            "https://image.tmdb.org/t/p/w300/5qHNjhtj4F0h5q7q9q7q7q7q7q7q.jpg",
+          name: "Salman Khan",
+          image: "https://placehold.co/300x300?text=SRK",
         },
         {
-          name: "Hrithik Roshan",
-          image:
-            "https://image.tmdb.org/t/p/w300/1f2f2f2f2f2f2f2f2f2f2f2f2f2f2f.jpg",
+          name: "Ranbir Kapoor",
+          image: "https://placehold.co/300x300?text=Hrithik",
+        },
+        {
+          name: "Ranveer Singh",
+          image: "https://placehold.co/300x300?text=Aamir",
+        },
+        {
+          name: "Vicky Kaushal",
+          image: "https://placehold.co/300x300?text=Salman",
+        },
+      ]);
+      setRandomFemaleActors([
+        {
+          name: "Deepika Padukone",
+          image: "https://placehold.co/300x300?text=Deepika",
+        },
+        { name: "Alia Bhatt", image: "https://placehold.co/300x300?text=Alia" },
+        {
+          name: "Priyanka Chopra",
+          image: "https://placehold.co/300x300?text=Priyanka",
+        },
+        {
+          name: "Katrina Kaif",
+          image: "https://placehold.co/300x300?text=Katrina",
         },
       ]);
     } finally {
@@ -174,7 +194,6 @@ const OnboardingPopup = () => {
 
   const handleFeedback = async (type) => {
     if (!user) {
-     toast.warning("Login required ❗");
       return;
     }
 

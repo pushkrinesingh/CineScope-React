@@ -5,7 +5,7 @@ import "./SinglePerson.css";
 import { options } from "../data";
 import { MovieContext } from "../Components/Router";
 import { FaCheck, FaPlus } from "react-icons/fa";
-import { toast } from "react-toastify";
+
 function SinglePerson() {
   const { id } = useParams();
 
@@ -81,7 +81,14 @@ function SinglePerson() {
   return (
     <section className="person-page">
       <div className="person-info">
-        <img src={`${baseImageUrl}${person.profile_path}`} alt={person.name} />
+        <img
+          src={
+            person.profile_path
+              ? `${baseImageUrl}${person.profile_path}`
+              : "https://placehold.co/300x450?text=No+Image"
+          }
+          alt={person.name}
+        />
 
         <div>
           <h1>{person.name}</h1>
@@ -108,11 +115,11 @@ function SinglePerson() {
               >
                 <img
                   src={
-                    person.profile_path
-                      ? `${baseImageUrl}${person.profile_path}`
+                    movie.poster_path
+                      ? `${baseImageUrl}${movie.poster_path}`
                       : "https://placehold.co/300x450?text=No+Image"
                   }
-                  alt={person.name}
+                  alt={movie.title}
                 />
               </Link>
               <button
@@ -124,7 +131,6 @@ function SinglePerson() {
                 onClick={async (e) => {
                   e.preventDefault();
                   if (!user) {
-                    toast.warning("Please login first ⚠️");
                     navigate(`/login?next=${location.pathname}`, {
                       state: { pendingMovie: movie },
                     });

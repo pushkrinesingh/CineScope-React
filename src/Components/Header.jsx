@@ -330,7 +330,7 @@ const Header = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           />
           <button type="button" aria-label="Search">
             <FaSearch />
@@ -404,7 +404,7 @@ const Header = () => {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => setIsFocused(true)}
-              onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 200)}
               autoFocus
             />
             <button type="button" aria-label="Search">

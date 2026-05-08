@@ -4,8 +4,6 @@ import { baseImageUrl, options } from "../data";
 import "./GenrePage.css";
 import { MovieContext } from "../Components/Router";
 import { FaCheck, FaPlus } from "react-icons/fa";
-import { toast } from "react-toastify";
-
 const GenrePage = () => {
   const { id } = useParams();
   const [content, setContent] = useState([]);
@@ -17,7 +15,13 @@ const GenrePage = () => {
   const { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
     useContext(MovieContext);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setContent([]);
     setPage(1);
   }, [id]);
@@ -121,7 +125,6 @@ const GenrePage = () => {
                 onClick={async (e) => {
                   e.preventDefault();
                   if (!user) {
-                    toast.warning("Please login first ⚠️");
                     navigate(`/login?next=${location.pathname}`, {
                       state: { pendingMovie: item },
                     });

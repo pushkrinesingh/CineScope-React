@@ -139,11 +139,13 @@ const MoodRecommender = () => {
     setShowModal(false);
     navigate(`/movie/${movieId}`);
   };
+
   useEffect(() => {
     if (location.state?.openMood && user) {
       setShowModal(true);
     }
-  }, [location]);
+  }, [location, user]);
+
   const handleOpen = () => {
     if (!user) {
       navigate("/login?next=/", {
@@ -199,7 +201,13 @@ const MoodRecommender = () => {
                     className="mood-movie-card"
                     onClick={() => handleMovieClick(movie.id)}
                   >
-                    <img src={movie.poster} alt={movie.title} />
+                    <img
+                      src={
+                        movie.poster ||
+                        "https://placehold.co/342x513?text=No+Image"
+                      }
+                      alt={movie.title}
+                    />
                     <div className="mood-movie-info">
                       <h4>
                         {movie.title} <span>({movie.year})</span>
