@@ -223,7 +223,7 @@
   left: 0;
   right: 0;
   background: var(--bg-searchhistory);        
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px 14px;
   z-index: 1000;
@@ -250,7 +250,7 @@
   align-items: center;
   gap: 6px;
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 4px 10px;
   font-size: 13px;
@@ -260,7 +260,7 @@
 }
 
 .history-chip:hover {
-  background: var(--border-color);
+  background: var(--bg-elevated);
 }
 
 .chip-remove {

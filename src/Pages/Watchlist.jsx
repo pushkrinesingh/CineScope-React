@@ -46,7 +46,7 @@ const WatchList = () => {
                         })
                       : ""}
                   </p>
-                  <button className="watchlist-remove-btn"onClick={() => RemoveFromWatchlist(item.id)}>
+                  <button className="watchlist-remove-btn" onClick={() => RemoveFromWatchlist(item.id)}>
                     Remove
                   </button>
                 </div>

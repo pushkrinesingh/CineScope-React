@@ -202,7 +202,7 @@ function SingleMovie() {
         .slice(0, 35);
 
       setCast(mainCast);
-      setReviews(reviewData.results.slice(0, 5));
+      setReviews((reviewData.results || []).slice(0, 5));
     } catch (error) {
       console.error("Failed to fetch movie:", error);
       setFetchError(true);
@@ -612,6 +612,7 @@ function SingleMovie() {
             <iframe
               src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
               title="Trailer"
+              allow="autoplay; encrypted-media"
               allowFullScreen
             ></iframe>
           </div>

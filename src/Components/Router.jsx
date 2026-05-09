@@ -64,7 +64,7 @@ function Router() {
       }
     }
     fetchTheme();
-  }, [user,theme]);
+  }, [user]);
 
   const toggleTheme = useCallback(async () => {
     const newTheme = theme === "dark" ? "light" : "dark";

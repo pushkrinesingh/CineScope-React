@@ -339,7 +339,15 @@ const Header = () => {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           />
-          <button type="button" aria-label="Search">
+          <button
+            type="button"
+            aria-label="Search"
+            onClick={() => {
+              if (query.trim() && suggestions.length > 0) {
+                handleClick(suggestions[0]);
+              }
+            }}
+          >
             <FaSearch />
           </button>
           {suggestions.length > 0 ? <SuggestionsList /> : <SearchHistoryBox />}

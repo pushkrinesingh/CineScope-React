@@ -161,7 +161,7 @@ const OnboardingPopup = () => {
       );
       const data = await res.json();
       setFunFact(data.choices[0].message.content.trim());
-    } catch {
+    } catch(err) {
       console.error("Fun fact fetch failed:", err);
       setFunFact(`${actorName} is a very talented and popular actor.`);
     } finally {
