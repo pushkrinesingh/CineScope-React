@@ -14,9 +14,9 @@ export const urls = {
   topRatedMovies: `${BASE_URL}movie/top_rated?language=en-US`,
   topRatedTVShows: `${BASE_URL}tv/top_rated?language=en-US`,
 
-  upcomingMovies: `${BASE_URL}discover/movie?primary_release_date.gte=${today}&primary_release_date.lte=${year}-12-31&sort_by=popularity.desc&language=en-US`,
+  upcomingMovies: `${BASE_URL}discover/movie?primary_release_date.gte=${today}&primary_release_date.lte=${year}-12-31&sort_by=popularity.desc&language=en-US&include_adult=false`,
 
-  upcomingTVShows: `${BASE_URL}discover/tv?first_air_date.gte=${today}&first_air_date.lte=${year}-12-31&sort_by=popularity.desc&language=en-US`,
+  upcomingTVShows: `${BASE_URL}discover/tv?first_air_date.gte=${today}&first_air_date.lte=${year}-12-31&sort_by=popularity.desc&language=en-US&include_adult=false`,
 
   trendingCelebrities: `${BASE_URL}person/popular`,
 };

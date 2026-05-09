@@ -119,7 +119,9 @@ const MoodRecommender = () => {
                 )?.reason || "",
             };
           }
-        } catch (e) {}
+        } catch (e) {
+          console.error("Failed to fetch movie details for:", title, e);
+        }
         return null;
       };
 

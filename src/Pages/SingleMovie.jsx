@@ -59,7 +59,7 @@ function SingleMovie() {
   const navigate = useNavigate();
   const castRef = useRef(null);
 
-  let { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
+  const { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
     useContext(MovieContext);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function SingleMovie() {
     if (isTV) {
       fetchSeasonDetails(selectedSeason);
     }
-  }, [selectedSeason, id]);
+  }, [selectedSeason, id, isTV]);
 
   useEffect(() => {
     const q = query(
@@ -257,7 +257,6 @@ function SingleMovie() {
     try {
       await deleteDoc(doc(db, "reviews", reviewId));
       toast.success("Review deleted");
-      setUserReviews((prev) => prev.filter((r) => r.id !== reviewId));
     } catch (error) {
       toast.error("Failed to delete review ");
       console.error("Delete review error:", error);
@@ -268,6 +267,7 @@ function SingleMovie() {
     setReviewText(review.text);
     setEditingId(review.id);
   }
+
   async function handleTrailer() {
     if (showTrailer) {
       setShowTrailer(false);
@@ -375,7 +375,7 @@ function SingleMovie() {
 
             <p className="genre">
               <span>Genre : </span>
-              {movie.genres.map((e) => e.name).join(" | ") || "N/A"}
+              {movie.genres?.map((e) => e.name).join(" | ") || "N/A"}
             </p>
 
             <p className="release">

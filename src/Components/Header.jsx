@@ -23,6 +23,7 @@ const Header = () => {
   const [searchHistory, setSearchHistory] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
+  const mobileSearchRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -98,12 +99,20 @@ const Header = () => {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      const clickedOutsideDesktop =
+        searchRef.current && !searchRef.current.contains(event.target);
+
+      const clickedOutsideMobile =
+        !mobileSearchRef.current ||
+        !mobileSearchRef.current.contains(event.target);
+
+      if (clickedOutsideDesktop && clickedOutsideMobile) {
         setSuggestions([]);
         setActiveIndex(-1);
         setIsFocused(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -263,9 +272,7 @@ const Header = () => {
 
       {isFocused && query.length === 0 && !user && (
         <div className="search-history">
-          <p className="history-label">
-           Login to save your search history
-          </p>
+          <p className="history-label">Login to save your search history</p>
         </div>
       )}
     </>
@@ -394,7 +401,7 @@ const Header = () => {
       </header>
 
       {searchOpen && (
-        <div className="mobile-searchbar" ref={searchRef}>
+        <div className="mobile-searchbar" ref={mobileSearchRef}>
           <div className="searchbar">
             <GenreSelect />
             <input

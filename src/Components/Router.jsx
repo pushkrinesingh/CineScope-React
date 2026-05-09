@@ -9,9 +9,8 @@ import Login from "../Pages/Login";
 import { createContext, useCallback, useEffect, useState } from "react";
 import SinglePerson from "../Pages/SinglePerson";
 import ScrollToTop from "./ScrollToTop";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged,signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
 import PageNotFound from "../Pages/PageNotFound";
 import { ToastContainer, toast } from "react-toastify";
 import GenrePage from "../Pages/GenrePage";
@@ -65,7 +64,7 @@ function Router() {
       }
     }
     fetchTheme();
-  }, [user]);
+  }, [user,theme]);
 
   const toggleTheme = useCallback(async () => {
     const newTheme = theme === "dark" ? "light" : "dark";

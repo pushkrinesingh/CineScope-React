@@ -119,7 +119,7 @@ function SinglePerson() {
                       ? `${baseImageUrl}${movie.poster_path}`
                       : "https://placehold.co/300x450?text=No+Image"
                   }
-                  alt={movie.title}
+                  alt={movie.title || movie.name}
                 />
               </Link>
               <button

@@ -69,7 +69,9 @@ const OnboardingPopup = () => {
           if (person?.profile_path) {
             return `https://image.tmdb.org/t/p/w300${person.profile_path}`;
           }
-        } catch (e) {}
+        } catch (e) {
+          console.error("Failed to fetch actor image for:", name, e);
+        }
         return `https://picsum.photos/id/${Math.floor(Math.random() * 100) + 100}/300/300`;
       };
 
@@ -160,6 +162,7 @@ const OnboardingPopup = () => {
       const data = await res.json();
       setFunFact(data.choices[0].message.content.trim());
     } catch {
+      console.error("Fun fact fetch failed:", err);
       setFunFact(`${actorName} is a very talented and popular actor.`);
     } finally {
       setLoadingFact(false);
