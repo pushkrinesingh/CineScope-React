@@ -49,7 +49,7 @@
 }
 
 .film-card img {
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
   width: 100%;
   height: 260px;
   object-fit: cover;
@@ -168,7 +168,7 @@
   }
 
   .film-card img {
-    height: 200px;
+    height: 230px;
   }
 
   .film-info h3 {
@@ -195,8 +195,8 @@
   }
 
   .film-card img {
-    height: 170px;
-    border-radius: 10px;
+    height: 230px;
+    /* border-radius: 10px; */
   }
 
   .film-info {
