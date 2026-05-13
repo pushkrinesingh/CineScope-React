@@ -663,6 +663,7 @@ function SingleMovie() {
 
       <div className="similar-section">
         <Home
+          key={`${isTV ? "tv" : "movie"}-${id}`}
           heading={isTV ? "Similar TV Shows" : "Similar Movies"}
           urls={[
             `https://api.themoviedb.org/3/${isTV ? "tv" : "movie"}/${id}/similar`,
