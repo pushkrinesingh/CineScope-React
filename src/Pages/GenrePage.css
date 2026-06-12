@@ -137,8 +137,7 @@
 
 .genre-imdb-btn {
   background: rgba(0, 0, 0, 0.5); 
-  color: var(--text-primary); 
-  backdrop-filter: blur(4px);
+  color: white; 
 }
 
 

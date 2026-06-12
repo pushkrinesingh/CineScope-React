@@ -1,76 +1,77 @@
 :root,
 [data-theme="dark"] {
-  --bg-main: #141414;
-  --bg-secondary: #1c1c1c;
-  --bg-elevated: #232323;
-  --bg-card: linear-gradient(145deg, #141824, #0e111a);
-  --bg-header: rgba(20, 20, 20, 0.65);
-  --bg-footer: linear-gradient(135deg, #141414, #1c1c1c);
-  --bg-section: linear-gradient(135deg, #141414, #1c1c1c);
-  --bg-toggle: #1c1f2b;
-  --bg-searchbar: #232323;
-  --bg-searchhistory:#242323;
-  --bg-suggestions: #1c1c1c;
-  --bg-mobile-menu: #1c1c1c;
-  --bg-skeleton: #2a2a2a;
-  --bg-skeleton-shine: #3a3a3a;
+  --bg-main: #0d0d0d;
+  --bg-secondary: #161616;
+  --bg-elevated: #1e1e1e;
+  --bg-card: linear-gradient(145deg, #2e2e2e, #1f1f1f);
+  --bg-header: rgba(13, 13, 13, 0.5);
+  --bg-footer: linear-gradient(135deg, #0d0d0d, #161616);
+  --bg-section: linear-gradient(135deg, #1e1e1e, #141414);
+  --bg-toggle: #1a1d2e;
+  --bg-searchbar: #1a1a1a;
+  --bg-searchhistory: #181818;
+  --bg-suggestions: #161616;
+  --bg-mobile-menu: #161616;
+  --bg-skeleton: #1e1e1e;
+  --bg-skeleton-shine: #2c2c2c;
 
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --text-muted: #888;
-  --text-nav: #ccc;
+  --text-primary: #f0ede8;
+  --text-secondary: #a8a39c;
+  --text-muted: #6b6560;
+  --text-nav: #c9c4bc;
 
   --accent: #f5c518;
-  --accent-soft: rgba(245, 197, 24, 0.15);
-  --accent-gradient: linear-gradient(90deg, #f5c518, #ffd84d);
+  --accent-soft: rgba(245, 197, 24, 0.12);
+  --accent-gradient: linear-gradient(90deg, #e8b800, #f5c518, #ffd84d);
 
-  --border: rgba(255, 255, 255, 0.08);
-  --border-genre: #555;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-genre: #3a3a3a;
 
-  --suggestion-hover: #2a2a2a;
-  --suggestion-active-bg: #2a2e3f;
+  --suggestion-hover: #1e1e1e;
+  --suggestion-active-bg: #1e2235;
 
-  --card-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(245, 197, 24, 0.2);
-  --movie-overlay: rgba(20, 20, 20, 0.6);
+  --card-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.06);
+  --movie-overlay: rgba(13, 13, 13, 0.65);
 
-  --search-btn-color: #aaa;
+  --search-btn-color: #8a8580;
 }
 
 [data-theme="light"] {
-  --bg-main: #f5f5f5;
-  --bg-secondary: #ececec;
-  --bg-elevated: #ffffff;
-  --bg-card: linear-gradient(145deg, #ffffff, #f0f0f0);
-  --bg-header: rgba(255, 255, 255, 0.7);
-  --bg-footer: linear-gradient(135deg, #f5f5f5, #ececec);
-  --bg-section: linear-gradient(135deg, #f5f5f5, #ececec);
-  --bg-toggle: #e0e0e0;
-  --bg-searchbar: #e8e8e8;
-  --bg-searchhistory:#ffffff;
-  --bg-suggestions: #ffffff;
-  --bg-mobile-menu: #ffffff;
-  --bg-skeleton: #e0e0e0;
-  --bg-skeleton-shine: #d0d0d0;
+  --bg-main: #e0e0e0;
+  --bg-secondary: #ede8de;
+  --bg-elevated: #e8e2d6;
+  --bg-card: linear-gradient(145deg, #ffffff, #d6d6d6);
+  --bg-header: rgba(226, 226, 226, 0.75);
+  --bg-footer: linear-gradient(135deg, #b5b5b5, #ffffff);
+  --bg-section: linear-gradient(135deg, #e8e8e8, #ffffff);
+  --bg-toggle: #ddd8ce;
+  --bg-searchbar: #eae4d8;
+  --bg-searchhistory: #ede8de;
+  --bg-suggestions: #f5f0e8;
+  --bg-mobile-menu: #ede8de;
+  --bg-skeleton: #e4ddd0;
+  --bg-skeleton-shine: #d8d0c0;
 
-  --text-primary: #141414;
-  --text-secondary: #444;
-  --text-muted: #666;
-  --text-nav: #333;
+  
+  --text-primary: #1a1612;
+  --text-secondary: #4a4438;
+  --text-muted: #7a7060;
+  --text-nav: #3a3028;
 
-  --accent: #c9a00e;
-  --accent-soft: rgba(201, 160, 14, 0.15);
-  --accent-gradient: linear-gradient(90deg, #c9a00e, #e8b800);
+  --accent: #f5c518;
+  --accent-soft: rgba(184, 146, 10, 0.15);
+  --accent-gradient: linear-gradient(90deg, #a07c06, #b8920a, #d4aa18);
 
-  --border: rgba(0, 0, 0, 0.1);
-  --border-genre: #bbb;
+  --border: rgba(0, 0, 0, 0.09);
+  --border-genre: #c0b8a8;
 
-  --suggestion-hover: #f0f0f0;
-  --suggestion-active-bg: #fff8dc;
+  --suggestion-hover: #ede6d8;
+  --suggestion-active-bg: #fdf4d0;
 
-  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 12px rgba(201, 160, 14, 0.1);
-  --movie-overlay: rgba(255, 255, 255, 0.65);
+  --card-shadow: 0 8px 28px rgba(100, 80, 20, 0.14), 0 0 12px rgba(184, 146, 10, 0.08);
+  --movie-overlay: rgba(245, 240, 232, 0.6);
 
-  --search-btn-color: #555;
+  --search-btn-color: #6a6050;
 }
 
 
