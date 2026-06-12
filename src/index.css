@@ -37,13 +37,13 @@
 }
 
 [data-theme="light"] {
-  --bg-main: #e0e0e0;
+  --bg-main: #f5f0e8;
   --bg-secondary: #ede8de;
   --bg-elevated: #e8e2d6;
-  --bg-card: linear-gradient(145deg, #ffffff, #d6d6d6);
-  --bg-header: rgba(226, 226, 226, 0.75);
-  --bg-footer: linear-gradient(135deg, #b5b5b5, #ffffff);
-  --bg-section: linear-gradient(135deg, #e8e8e8, #ffffff);
+  --bg-card: linear-gradient(145deg, #ffffff, #faf7f2);
+  --bg-header: rgba(245, 240, 232, 0.75);
+  --bg-footer: linear-gradient(135deg, #ede8de, #f5f0e8);
+  --bg-section: linear-gradient(135deg, #eae0ce, #d5cfc2);
   --bg-toggle: #ddd8ce;
   --bg-searchbar: #eae4d8;
   --bg-searchhistory: #ede8de;
@@ -52,7 +52,6 @@
   --bg-skeleton: #e4ddd0;
   --bg-skeleton-shine: #d8d0c0;
 
-  
   --text-primary: #1a1612;
   --text-secondary: #4a4438;
   --text-muted: #7a7060;
@@ -118,4 +117,4 @@ h1, h2, h3, h4, h5, h6, a {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
+} 
