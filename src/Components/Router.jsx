@@ -39,9 +39,7 @@ function Router() {
   const location = useLocation();
   const navigate=useNavigate();
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", "dark");
-  }, []);
+
 
   useEffect(() => {
     async function fetchTheme() {
@@ -112,18 +110,30 @@ function Router() {
   );
 
  const RemoveFromWatchlist = useCallback(
-  async (IdToRemove) => {
+  async (IdToRemove, mediaType) => {
     if (!user) return;
-    const found = WatchList.find((item) => item.id === IdToRemove);
-    if (!found) return;
-    const docId = `${found.media_type || (found.first_air_date ? "tv" : "movie")}_${IdToRemove}`;
+    let docId;
+    if (mediaType) {
+      docId = `${mediaType}_${IdToRemove}`;
+    } else {
+      const found = WatchList.find((item) => item.id === IdToRemove);
+      if (!found) return;
+      docId = `${found.media_type || (found.first_air_date ? "tv" : "movie")}_${IdToRemove}`;
+    }
     const docRef = doc(db, "watchlists", user.uid, "movies-shows", docId);
     await deleteDoc(docRef);
   },
   [user, WatchList],
 );
 
-  function IsInWatchlist(id) {
+  function IsInWatchlist(id, mediaType) {
+    if (mediaType) {
+      return WatchList.some(
+        (item) =>
+          item.id === id &&
+          (item.media_type || (item.first_air_date ? "tv" : "movie")) === mediaType,
+      );
+    }
     return WatchList.some((item) => item.id === id);
   }
 
@@ -133,12 +143,13 @@ function Router() {
       .catch((error) => toast.error(error.message));
   }
 
+  const pendingMovie = location.state?.pendingMovie;
     useEffect(() => {
-    if (user && location.state?.pendingMovie) {
-      AddToWatchlist(location.state.pendingMovie);
+    if (user && pendingMovie) {
+      AddToWatchlist(pendingMovie);
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [user,location,navigate, AddToWatchlist]);
+  }, [user, pendingMovie, navigate, AddToWatchlist, location.pathname]);
 
   return (
     <MovieContext.Provider
@@ -156,14 +167,14 @@ function Router() {
       }}
     >
       <Header />
-      <MoodRecommender />
-      <OnboardingPopup />
       <ScrollToTop />
       <Routes>
         <Route
           path="/"
           element={
             <>
+              <MoodRecommender />
+              <OnboardingPopup />
               <Home
                 heading="Trending Movies"
                 btn1="Day"
@@ -223,7 +234,7 @@ function Router() {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        theme="dark"
+        theme={theme}
         newestOnTop
         closeOnClick
         pauseOnHover={false}

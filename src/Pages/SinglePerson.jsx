@@ -22,20 +22,20 @@ function SinglePerson() {
     async function fetchPerson() {
       const personURL = `https://api.themoviedb.org/3/person/${id}`;
 
-      const movieURL = `https://api.themoviedb.org/3/person/${id}/movie_credits`;
+      const creditsURL = `https://api.themoviedb.org/3/person/${id}/combined_credits`;
 
       try {
-        const [personRes, movieRes] = await Promise.all([
+        const [personRes, creditsRes] = await Promise.all([
           fetch(personURL, options),
-          fetch(movieURL, options),
+          fetch(creditsURL, options),
         ]);
 
         const personData = await personRes.json();
-        const movieData = await movieRes.json();
+        const creditsData = await creditsRes.json();
 
         setPerson(personData);
 
-        const sortedMovies = (movieData.cast || [])
+        const sortedMovies = (creditsData.cast || [])
           .filter((m) => m.poster_path)
           .sort((a, b) => b.popularity - a.popularity);
 

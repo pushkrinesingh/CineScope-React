@@ -9,21 +9,22 @@ const GenrePage = () => {
   const [content, setContent] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [fetchKey, setFetchKey] = useState(0);
   const observer = useRef();
   const navigate = useNavigate();
   const location = useLocation();
   const { AddToWatchlist, RemoveFromWatchlist, IsInWatchlist, user } =
     useContext(MovieContext);
 
-  const isFirstRender = useRef(true);
+  const prevId = useRef(id);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+    if (prevId.current !== id) {
+      prevId.current = id;
+      setContent([]);
+      setPage(1);
+      setFetchKey((k) => k + 1);
     }
-    setContent([]);
-    setPage(1);
   }, [id]);
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const GenrePage = () => {
       }
     }
     fetchContent();
-  }, [id, page]);
+  }, [id, page, fetchKey]);
 
   const lastElementRef = (node) => {
     if (loading) return;
