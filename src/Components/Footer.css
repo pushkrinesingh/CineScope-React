@@ -28,12 +28,12 @@
 }
 
 .footer-creator:hover {
-  color: var(--accent);
-  transform: scale(1.03);
+  /* color: var(--accent); */
+  transform: scale(1.06);
 }
 .footer-left h3 {
   font-size: 25px;
-  color: #c5a223;
+  color: var(--accent);
   position: relative;
   margin-top: 25px;
 }
@@ -95,7 +95,7 @@
 
 .footer-links a:hover {
   color: var(--accent);
-  transform: translateX(8px);
+  transform: translateX(12px);
 }
 
 .icons {
